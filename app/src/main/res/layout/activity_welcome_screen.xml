@@ -23,12 +23,12 @@
         android:src="@mipmap/logo_gelora" />
 
     <TextView
-        android:id="@+id/haloMitraGelora"
+        android:id="@+id/haloPelangganGelora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/centerDivider"
         android:layout_centerHorizontal="true"
-        android:text="Halo Mitra Gelora!"
+        android:text="Selamat Datang!"
         android:textColor="@color/hitam"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -37,12 +37,12 @@
         android:id="@+id/daftarButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/haloMitraGelora"
+        android:layout_below="@id/haloPelangganGelora"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="60dp"
         android:layout_marginTop="60dp"
         android:background="@drawable/button_green_rounded_5dp"
-        android:text="Daftar Mitra"
+        android:text="Daftar"
         android:textAllCaps="false"
         android:textColor="@color/putih"
         android:textSize="18sp"
@@ -57,7 +57,7 @@
         android:layout_marginStart="60dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/button_green_rounded_stroke_5dp"
-        android:text="Masuk Mitra"
+        android:text="Masuk"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
