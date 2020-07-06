@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/welcome_screen_background"
+    tools:context=".activity.WelcomeScreen">
+
+    <View
+        android:id="@+id/centerDivider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/logoGeloraWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="130dp"
+        android:layout_alignBottom="@id/centerDivider"
+        android:layout_marginBottom="60dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/logo_gelora" />
+
+    <TextView
+        android:id="@+id/haloMitraGelora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/centerDivider"
+        android:layout_centerHorizontal="true"
+        android:text="Halo Mitra Gelora!"
+        android:textColor="@color/hitam"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/daftarButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/haloMitraGelora"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/button_green_rounded_5dp"
+        android:text="Daftar Mitra"
+        android:textAllCaps="false"
+        android:textColor="@color/putih"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/masukButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/daftarButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_green_rounded_stroke_5dp"
+        android:text="Masuk Mitra"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        />
+
+
+</RelativeLayout>

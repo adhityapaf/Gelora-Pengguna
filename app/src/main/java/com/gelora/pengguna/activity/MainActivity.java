@@ -1,8 +1,10 @@
-package com.gelora.pengguna;
+package com.gelora.pengguna.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.gelora.pengguna.R;
 
 public class MainActivity extends AppCompatActivity {
 
