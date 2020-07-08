@@ -1,15 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="70dp"
+    android:fillViewport="true"
     tools:context=".fragment.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Home" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/beritaOlahragaLabelRelative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/olahargaKategoriRelative"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/ic_berita"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_berita" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/ic_berita"
+                android:fontFamily="sans-serif-medium"
+                android:text="Berita Olahraga"
+                android:textColor="@color/hitam"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/berita_recyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="157dp"
+            android:layout_below="@id/beritaOlahragaLabelRelative"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp" />
+
+        <RelativeLayout
+            android:id="@+id/mauMainApaRelative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/ic_peluit"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_peluit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/ic_peluit"
+                android:fontFamily="sans-serif-medium"
+                android:text="Mau Main Apa?"
+                android:textColor="@color/hitam"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/olahargaKategoriRelative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mauMainApaRelative"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp">
+
+            <View
+                android:id="@+id/centerDividerHome"
+                android:layout_width="10dp"
+                android:layout_height="160dp"
+                android:layout_centerInParent="true"
+                android:background="@color/hitam"
+                android:visibility="invisible" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/futsal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/centerDividerHome"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                app:cardCornerRadius="5dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/ic_futsal"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_futsal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/ic_futsal"
+                        android:fontFamily="sans-serif"
+                        android:text="Futsal"
+                        android:textColor="@color/hitam"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/sepak_bola"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/centerDividerHome"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                app:cardCornerRadius="5dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/ic_sepakBola"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_sepakbola" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/ic_sepakBola"
+                        android:fontFamily="sans-serif"
+                        android:text="Sepak Bola"
+                        android:textColor="@color/hitam"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/basket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/futsal"
+                android:layout_marginTop="10dp"
+                android:layout_toStartOf="@id/centerDividerHome"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                app:cardCornerRadius="5dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/ic_basket"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_basket" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/ic_basket"
+                        android:fontFamily="sans-serif"
+                        android:text="Basket"
+                        android:textColor="@color/hitam"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/bulu_tangkis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/sepak_bola"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/centerDividerHome"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                app:cardCornerRadius="5dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/ic_bulu_tangkis"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_bulutangkis" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/ic_bulu_tangkis"
+                        android:fontFamily="sans-serif"
+                        android:text="Bulu Tangkis"
+                        android:textColor="@color/hitam"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
