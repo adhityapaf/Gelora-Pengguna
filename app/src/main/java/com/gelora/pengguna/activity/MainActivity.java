@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.gelora.pengguna.R;
-import com.gelora.pengguna.fragment.FavoriteFragment;
+import com.gelora.pengguna.fragment.LapanganFragment;
 import com.gelora.pengguna.fragment.HomeFragment;
 import com.gelora.pengguna.fragment.OrderFragment;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.home:
                         fragment = new HomeFragment();
                         break;
-                    case R.id.favorite:
-                        fragment = new FavoriteFragment();
+                    case R.id.lapangan:
+                        fragment = new LapanganFragment();
                         break;
                     case R.id.list:
                         fragment = new OrderFragment();

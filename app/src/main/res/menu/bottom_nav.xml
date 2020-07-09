@@ -11,12 +11,12 @@
         android:title="Home"
         />
     <item
-        android:id="@+id/favorite"
-        android:icon="@drawable/ic_favorite_black_24dp"
+        android:id="@+id/lapangan"
+        android:icon="@drawable/ic_lapangan"
         app:cnb_iconColor="@color/hitam"
         app:cnb_textColor = "@color/hitam"
         app:cnb_backgroundColor = "@color/putih"
-        android:title="Favorit"
+        android:title="Lapangan"
         />
     <item
         android:id="@+id/list"

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="160dp">
+    android:layout_height="160dp"
+    app:cardCornerRadius="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -9,41 +11,56 @@
 
         <ImageView
             android:id="@+id/image_berita"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:scaleType="fitXY"
+            android:layout_width="124dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/img_placeholder_berita" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/image_berita"
+            android:layout_toEndOf="@id/image_berita"
             android:paddingStart="10dp"
             android:paddingEnd="10dp">
 
             <TextView
                 android:id="@+id/judul_berita"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/selengkapnya_link"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:text="Judul Berita"
                 android:textColor="@color/hitam"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
+            <TextView
+                android:id="@+id/isi_berita"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/lorem"
+                android:fontFamily="sans-serif"
+                android:textSize="12sp"
+                android:layout_below="@id/judul_berita"
+                android:layout_above="@id/selengkapnya_link"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"/>
             <TextView
                 android:id="@+id/selengkapnya_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_alignParentBottom="true"
                 android:fontFamily="sans-serif-light"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="Selengkapnya.."
+                android:textColor="@color/biru"
                 android:textSize="12sp" />
         </RelativeLayout>
 
