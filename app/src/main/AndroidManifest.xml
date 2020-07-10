@@ -16,12 +16,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.Login"
-            android:windowSoftInputMode="adjustPan"
-            />
-        <activity android:name=".activity.Register"
-            android:windowSoftInputMode="adjustPan"
-            />
+        <activity android:name=".activity.AkunActivity"></activity>
+        <activity
+            android:name=".activity.Login"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.Register"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activity.WelcomeScreen" />
         <activity android:name=".activity.SplashScreen">
             <intent-filter>
@@ -30,9 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            />
+        <activity
+            android:name=".activity.MainActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

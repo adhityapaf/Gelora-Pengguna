@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AkunActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/header_relative"
+        android:elevation="20dp"
+        >
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:layout_gravity="center_vertical"
+            android:tint="@color/colorPrimary"
+            />
+
+        <TextView
+            android:id="@+id/akun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:text="Akun"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_relative"
+        android:layout_margin="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/hitam"
+            android:textSize="24sp"
+            android:id="@+id/editProfil_label"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama"
+            android:layout_below="@id/editProfil_label"
+            android:layout_marginTop="26dp"
+            android:textSize="18sp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:id="@+id/editNamaLabel"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editNamaLabel"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/green_stroke_rectangle"
+            android:hint="Nama Anda.."
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:id="@+id/editNamaField"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editNamaField"
+            android:text="Email"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif"
+            android:id="@+id/editEamilLabel"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editEamilLabel"
+            android:background="@drawable/green_stroke_rectangle"
+            android:textSize="18sp"
+            android:hint="Email Anda.."
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/editEmailField"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editEmailField"
+            android:text="Password"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="sans-serif"
+            android:id="@+id/editPasswordLabel"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editPasswordLabel"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/green_stroke_rectangle"
+            android:hint="Password Anda.."
+            android:padding="10dp"
+            android:id="@+id/editPasswordField"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editPasswordField"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_green_rounded_5dp"
+            android:text="Simpan Perubahan"
+            android:textColor="@color/putih"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:textSize="18sp"
+            android:id="@+id/editSimpanPerubahanButton"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/logoutButton"
+            android:text="Lapangan Favorit"
+            android:background="@drawable/button_blue_rounded"
+            android:textColor="@color/putih"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:textAllCaps="false"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/lapanganFavoritButton"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Logout"
+            android:background="@drawable/button_red_rounded"
+            android:textColor="@color/putih"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:id="@+id/logoutButton"/>
+
+    </RelativeLayout>
+</RelativeLayout>
