@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
+    android:elevation="10dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_img_lapangan"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentStart="true"
+            app:cardCornerRadius="5dp">
+
+            <ImageView
+                android:id="@+id/img_lapangan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_placeholder_lapangan" />
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/card_img_lapangan">
+
+            <TextView
+                android:id="@+id/nama_lapangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Nama Lapangan"
+                android:textColor="@color/hitam"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/kategiLapanganRelative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nama_lapangan"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:id="@+id/ic_lapangan"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_lapangan"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/kategori_lapangan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@id/ic_lapangan"
+                    android:fontFamily="sans-serif"
+                    android:text="Futsal"
+                    android:textColor="@color/hitam"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/jenisLapanganRelative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/kategiLapanganRelative"
+                android:layout_marginTop="2dp">
+
+                <ImageView
+                    android:id="@+id/ic_rumput"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_grass"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/jenis_rumput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@id/ic_rumput"
+                    android:fontFamily="sans-serif"
+                    android:text="Vinyl"
+                    android:textColor="@color/hitam"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/harga_sewa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/jenisLapanganRelative"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
+                android:text="Rp.150.000"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/jenisLapanganRelative"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@id/harga_sewa"
+                android:fontFamily="sans-serif"
+                android:text="/jam"
+                android:textColor="@color/hitam"
+                android:textSize="12sp"
+                android:textStyle="italic" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
