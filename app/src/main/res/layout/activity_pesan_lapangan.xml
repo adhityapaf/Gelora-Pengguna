@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F2F2"
+    tools:context=".activity.PesanLapanganActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/header_relative"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:elevation="20dp">
+
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:tint="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/pesanLapangan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:fontFamily="sans-serif"
+            android:text="Pesan Lapangan"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:id="@+id/pesanLapangan_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/review_section_relative"
+        android:layout_below="@id/header_relative">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/detailLapanganRelative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/putih">
+
+                <TextView
+                    android:id="@+id/nama_lapangan_pesan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:fontFamily="sans-serif"
+                    android:text="Nama Lapangan"
+                    android:textColor="@color/hitam"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/img_lapangan_pesan"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_below="@id/nama_lapangan_pesan"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_placeholder_lapangan" />
+
+                <RelativeLayout
+                    android:id="@+id/kategoriLapanganRelative"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/img_lapangan_pesan"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/ic_lapangan"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_lapangan"
+                        android:tint="@color/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/kategori_lapangan_pesan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="12dp"
+                        android:layout_toEndOf="@id/ic_lapangan"
+                        android:fontFamily="sans-serif"
+                        android:text="Futsal"
+                        android:textColor="@color/hitam"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/jenisLapanganRelative"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/kategoriLapanganRelative"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp">
+
+                    <ImageView
+                        android:id="@+id/ic_rumput"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_grass"
+                        android:tint="@color/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/jenmis_lapangan_pesan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="12dp"
+                        android:layout_toEndOf="@id/ic_rumput"
+                        android:fontFamily="sans-serif"
+                        android:text="Rumput"
+                        android:textColor="@color/hitam"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/harga_sewa_pesan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/img_lapangan_pesan"
+                    android:layout_marginTop="28dp"
+                    android:layout_toStartOf="@id/perjam"
+                    android:fontFamily="sans-serif"
+                    android:text="Rp. 150.000"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/perjam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/harga_sewa_pesan"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="-20dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="sans-serif"
+                    android:text="/jam"
+                    android:textColor="@color/hitam"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pilihTanggalRelative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailLapanganRelative"
+                android:layout_marginTop="10dp"
+                android:background="@color/putih"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="20dp">
+
+                <RelativeLayout
+                    android:id="@+id/pilihTanggalLabelRealtive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp">
+
+                    <ImageView
+                        android:id="@+id/ic_calendar"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_date_range_black_24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/ic_calendar"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Pilih Tanggal"
+                        android:textColor="@color/hitam"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tanggal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/pilihTanggalLabelRealtive"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="sans-serif"
+                    android:text="26/06/2020"
+                    android:textColor="@color/hitam"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/pilih_tanggal_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/pilihTanggalLabelRealtive"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/button_green_rounded_5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingStart="24dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="12dp"
+                    android:text="Pilih Tanggal"
+                    android:textAllCaps="false"
+                    android:textColor="@color/putih"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pilihWaktuRelative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pilihTanggalRelative"
+                android:layout_marginTop="10dp"
+                android:background="@color/putih"
+                android:paddingStart="20dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="30dp">
+
+                <ImageView
+                    android:id="@+id/ic_jam"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_access_time_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/ic_jam"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Pilih Waktu"
+                    android:textColor="@color/hitam"
+                    android:textSize="18sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/jam_sewa_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ic_jam"
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/pilihWaktuRelative"
+                android:background="#F2F2F2" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/review_section_relative"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/putih"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tanggalReview_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:text="Sabtu, 26 Juni 2020 "
+            android:textColor="@color/hitam"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/jamReview_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tanggalReview_text"
+            android:fontFamily="sans-serif-light"
+            android:text="10:00 - 12:00"
+            android:textColor="@color/hitam"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/hargaSewa_review_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="sans-serif"
+            android:text="Rp. 300.000,-"
+            android:textColor="@color/merah_font"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_blue_rounded"
+            android:text="Bayar"
+            android:textAllCaps="false"
+            android:textColor="@color/putih"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:id="@+id/bayar_button"/>
+    </RelativeLayout>
+</RelativeLayout>
