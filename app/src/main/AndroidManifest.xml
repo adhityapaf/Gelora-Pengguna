@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.PesanLapanganActivity"></activity>
+        <activity android:name=".activity.BerhasilUploadActivity"></activity>
+        <activity android:name=".activity.UploadBuktiPembayaranActivity" />
+        <activity android:name=".activity.PesanLapanganActivity" />
         <activity android:name=".activity.AkunActivity" />
         <activity
             android:name=".activity.Login"
