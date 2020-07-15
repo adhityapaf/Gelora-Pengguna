@@ -4,7 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
-    android:elevation="10dp"
+    android:elevation="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/lapanganCard"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@color/putih"
     >
 
     <RelativeLayout
@@ -63,7 +68,6 @@
                     android:id="@+id/kategori_lapangan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
                     android:layout_toEndOf="@id/ic_lapangan"
                     android:fontFamily="sans-serif"
