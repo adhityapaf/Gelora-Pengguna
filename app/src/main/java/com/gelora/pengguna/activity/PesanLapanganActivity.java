@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.gelora.pengguna.R;
 import com.gelora.pengguna.adapter.JamSewaAdapter;
+import com.gelora.pengguna.interfaces.OnJamClickListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +37,7 @@ import static com.gelora.pengguna.adapter.LapanganAdapter.JENIS_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.KATEGORI_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 
-public class PesanLapanganActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class PesanLapanganActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener , OnJamClickListener {
 
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
     ImageView gambharLapangan, backButton;
@@ -97,7 +98,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                     System.out.println(jamArrayList);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PesanLapanganActivity.this, LinearLayoutManager.HORIZONTAL, false);
                     jamSewaRecycler.setLayoutManager(linearLayoutManager);
-                    JamSewaAdapter jamSewaAdapter = new JamSewaAdapter(PesanLapanganActivity.this, jamArrayList);
+                    JamSewaAdapter jamSewaAdapter = new JamSewaAdapter(PesanLapanganActivity.this, jamArrayList, PesanLapanganActivity.this);
                     jamSewaRecycler.setAdapter(jamSewaAdapter);
                 }
             }
@@ -165,6 +166,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         tanggalLapanganReview.setText(dateString);
     }
 
+    @Override
     public void jamReview(ArrayList<String> jamList) {
         for (String i : jamList) {
             if (textA == null){
@@ -174,9 +176,6 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
 
             }
         }
-        TextView jamLapanganReview2 = findViewById(R.id.jamReview_text);
-        jamLapanganReview2.setText(textA);
-        textA = null;
 
     }
 }
