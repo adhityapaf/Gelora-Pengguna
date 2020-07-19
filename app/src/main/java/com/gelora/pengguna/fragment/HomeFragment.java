@@ -47,6 +47,51 @@ public class HomeFragment extends Fragment {
                         .commit();
             }
         });
+
+        sepakBola.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kategori = "Sepak Bola";
+                bundle.putString(LapanganFragment.DATA_RECEIVE, kategori);
+                LapanganFragment lapanganFragment = new LapanganFragment();
+                lapanganFragment.setArguments(bundle);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, lapanganFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        basket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kategori = "Basket";
+                bundle.putString(LapanganFragment.DATA_RECEIVE, kategori);
+                LapanganFragment lapanganFragment = new LapanganFragment();
+                lapanganFragment.setArguments(bundle);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, lapanganFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        buluTangkis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kategori = "Bulu Tangkis";
+                bundle.putString(LapanganFragment.DATA_RECEIVE, kategori);
+                LapanganFragment lapanganFragment = new LapanganFragment();
+                lapanganFragment.setArguments(bundle);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, lapanganFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         return view;
     }
 }
