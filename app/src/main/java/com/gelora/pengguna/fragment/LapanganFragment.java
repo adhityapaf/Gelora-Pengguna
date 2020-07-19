@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.gelora.pengguna.R;
 import com.gelora.pengguna.adapter.LapanganAdapter;
@@ -32,6 +33,7 @@ public class LapanganFragment extends Fragment {
     Context mContext;
     DatabaseReference ref;
     ArrayList<LapanganData> list;
+    ProgressBar progressBar;
     public LapanganFragment() {
         // Required empty public constructor
     }
@@ -43,6 +45,8 @@ public class LapanganFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_lapangan, container, false);
         lapanganRecycler = view.findViewById(R.id.lapanganRecyler);
+        progressBar = view.findViewById(R.id.progressbarlingkaran);
+        progressBar.setVisibility(View.VISIBLE);
         mContext = getContext();
         ref = FirebaseDatabase.getInstance().getReference("lapangan").child("id_lapangan");
         lapanganRecycler.setHasFixedSize(true);
@@ -63,6 +67,7 @@ public class LapanganFragment extends Fragment {
                     }
                     LapanganAdapter lapanganAdapter = new LapanganAdapter(list, getActivity());
                     lapanganRecycler.setAdapter(lapanganAdapter);
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

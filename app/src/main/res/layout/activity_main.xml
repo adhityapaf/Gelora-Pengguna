@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
     android:background="#F2F2F2"
-    >
+    tools:context=".activity.MainActivity">
 
     <RelativeLayout
         android:id="@+id/header_relative"
@@ -90,12 +89,11 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="sans-serif"
-            android:text="Adhitya Kusumadinatha "
+            android:text=""
             android:textColor="@color/putih"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:translationZ="10dp"
-            />
+            android:translationZ="10dp" />
 
         <ImageView
             android:layout_width="90dp"
