@@ -13,10 +13,33 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:tint="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/namaKategori"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/back_arrow"
+        android:fontFamily="sans-serif-medium"
+        android:text="Nama Kategori"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lapanganRecyler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/back_arrow"
         android:paddingBottom="80dp" />
 
 </RelativeLayout>
