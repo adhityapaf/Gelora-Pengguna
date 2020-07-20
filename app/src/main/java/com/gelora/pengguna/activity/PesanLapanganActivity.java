@@ -24,9 +24,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -41,12 +45,16 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
 
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
     ImageView gambharLapangan, backButton;
-    DatabaseReference ref;
+    DatabaseReference ref, ketersedianLapanganRef;
     Button datePicker;
-    String idLapanganIntent, namaLapanganIntent, gambarLapanganIntent, kategoriLapanganIntent, jenisLapanganIntent, hargaLapanganIntent;
+    String idLapanganIntent, namaLapanganIntent, gambarLapanganIntent, kategoriLapanganIntent, jenisLapanganIntent;
+    long hargaLapanganIntent;
     ArrayList<String> jamArrayList;
+    ArrayList<String> jamSewaArrayList;
     RecyclerView jamSewaRecycler;
     String textA;
+    Locale locale = new Locale("id", "ID");
+    NumberFormat n = NumberFormat.getCurrencyInstance(locale);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +80,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         gambarLapanganIntent = intent.getStringExtra(GAMBAR_LAPANGAN);
         kategoriLapanganIntent = intent.getStringExtra(KATEGORI_LAPANGAN);
         jenisLapanganIntent = intent.getStringExtra(JENIS_LAPANGAN);
-        hargaLapanganIntent = intent.getStringExtra(HARGA_LAPANGAN);
+        hargaLapanganIntent = intent.getLongExtra(HARGA_LAPANGAN,0);
         //
         jamSewaRecycler.setHasFixedSize(true);
         jamSewaRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -85,7 +93,9 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         namaLapangan.setText(namaLapanganIntent);
         kategoriLapangan.setText(kategoriLapanganIntent);
         jenisLapangan.setText(jenisLapanganIntent);
-        hargaLapangan.setText(hargaLapanganIntent);
+        String hargaText = n.format(hargaLapanganIntent);
+        String hargaSetText = hargaText.replaceAll(",00","").replaceAll("Rp", "Rp. ");
+        hargaLapangan.setText(hargaSetText);
         ref = FirebaseDatabase.getInstance().getReference("lapangan/id_lapangan").child(idLapanganIntent).child("jam_sewa");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -95,11 +105,6 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         jamArrayList.add(ds.getKey());
                     }
-                    System.out.println(jamArrayList);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PesanLapanganActivity.this, LinearLayoutManager.HORIZONTAL, false);
-                    jamSewaRecycler.setLayoutManager(linearLayoutManager);
-                    JamSewaAdapter jamSewaAdapter = new JamSewaAdapter(PesanLapanganActivity.this, jamArrayList, PesanLapanganActivity.this);
-                    jamSewaRecycler.setAdapter(jamSewaAdapter);
                 }
             }
 
@@ -112,15 +117,9 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         pilihTanggalLapangan.setVisibility(View.INVISIBLE);
         tanggalLapanganReview.setVisibility(View.INVISIBLE);
         jamLapanganReview.setVisibility(View.VISIBLE);
-        hargaLapanganReview.setVisibility(View.INVISIBLE);
-
-        jamSewaRecycler.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println(textA);
-                jamLapanganReview.setText(textA);
-            }
-        });
+        hargaLapanganReview.setVisibility(View.VISIBLE);
+        jamLapanganReview.setText(null);
+        hargaLapanganReview.setText(null);
 
         // set onClickListener
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -158,24 +157,65 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         c.set(Calendar.MONTH, month);
         c.set(Calendar.YEAR, year);
         String tanggal = "" + dayOfMonth + "/" + month + "/" + year;
-        Locale locale = new Locale("id", "ID");
         String dateString = DateFormat.getDateInstance(DateFormat.FULL, locale).format(c.getTime());
         pilihTanggalLapangan.setText(tanggal);
         pilihTanggalLapangan.setVisibility(View.VISIBLE);
         tanggalLapanganReview.setVisibility(View.VISIBLE);
         tanggalLapanganReview.setText(dateString);
+        ketersedianLapanganRef = FirebaseDatabase.getInstance().getReference("ketersediaan_lapangan").child(idLapanganIntent).child(dateString);
+        ketersedianLapanganRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                jamSewaArrayList = new ArrayList<>();
+                if (!snapshot.exists()){
+                    for (int i = 0; i < jamArrayList.size(); i++){
+                        ketersedianLapanganRef.child(jamArrayList.get(i)).setValue("tersedia");
+                    }
+                    System.out.println(jamArrayList);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PesanLapanganActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    jamSewaRecycler.setLayoutManager(linearLayoutManager);
+                    JamSewaAdapter jamSewaAdapter = new JamSewaAdapter(PesanLapanganActivity.this, jamArrayList, PesanLapanganActivity.this);
+                    jamSewaRecycler.setAdapter(jamSewaAdapter);
+                } else {
+                    for (DataSnapshot ds : snapshot.getChildren()){
+                        if (ds.getValue().equals("tersedia")){
+                            jamSewaArrayList.add(ds.getKey());
+                        }
+                    }
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PesanLapanganActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    jamSewaRecycler.setLayoutManager(linearLayoutManager);
+                    JamSewaAdapter jamSewaAdapter = new JamSewaAdapter(PesanLapanganActivity.this, jamSewaArrayList, PesanLapanganActivity.this);
+                    jamSewaRecycler.setAdapter(jamSewaAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     @Override
     public void jamReview(ArrayList<String> jamList) {
-        for (String i : jamList) {
-            if (textA == null){
-                textA = i;
-            } else {
-                textA += ", " + i;
+        Collections.sort(jamList);
+        if (jamList.isEmpty()){
+            textA = "";
 
+        } else  {
+            for (int i =  0; i < jamList.size(); i++) {
+                textA = jamList.toString();
             }
         }
-
+        String str = textA.replaceAll("\\[", "").replaceAll("\\]", "");
+        jamLapanganReview.setText(str);
+        int multiplier = jamList.size();
+        long harga = hargaLapanganIntent;
+        long totalHarga = harga * multiplier;
+        String s = n.format(totalHarga);
+        String a = s.replaceAll(",00","").replaceAll("Rp", "Rp. ");
+        System.out.println(a);
+        hargaLapanganReview.setText(a);
     }
 }

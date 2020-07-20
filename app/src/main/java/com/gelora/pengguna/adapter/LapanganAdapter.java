@@ -58,12 +58,12 @@ public class LapanganAdapter extends RecyclerView.Adapter<LapanganAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PesanLapanganActivity.class);
-                String idLapanganStr, namaLapanganStr, kategoriLapanganStr, jenisLapanganStr, hargaLapanganStr, gambarLapanganStr;
+                String idLapanganStr, namaLapanganStr, kategoriLapanganStr, jenisLapanganStr, gambarLapanganStr;
                 gambarLapanganStr = lapanganData.get(position).getGambar_lapangan();
                 namaLapanganStr = holder.namaLapangan.getText().toString();
                 kategoriLapanganStr = holder.kategoriLapangan.getText().toString();
                 jenisLapanganStr = holder.jenisLapangan.getText().toString();
-                hargaLapanganStr = holder.hargaLapangan.getText().toString();
+                long hargaLapanganStr = lapanganData.get(position).getHarga();
                 idLapanganStr = lapanganData.get(position).getId_lapangan();
                 intent.putExtra(ID_LAPANGAN, idLapanganStr);
                 intent.putExtra(NAMA_LAPANGAN, namaLapanganStr);

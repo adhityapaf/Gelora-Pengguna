@@ -38,7 +38,6 @@ public class LapanganFragment extends Fragment {
     Context mContext;
     DatabaseReference ref;
     ArrayList<LapanganData> list;
-    ArrayList<LapanganData> queryList;
     ProgressBar progressBar;
     public LapanganFragment() {
         // Required empty public constructor
