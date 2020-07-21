@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     ChipNavigationBar bottomNav;
     FragmentManager  fragmentManager;
     CardView akunButton;
+    ProgressBar progressBar;
     private static final String TAG = "MainActivity";
     DatabaseReference ref;
     TextView namaPemain;
@@ -40,11 +42,13 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottom_nav);
         akunButton = findViewById(R.id.akunButton);
         namaPemain = findViewById(R.id.username);
+        progressBar = findViewById(R.id.progressbarlingkaran);
         ref = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("nama");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 namaPemain.setText(snapshot.getValue().toString());
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
