@@ -13,16 +13,31 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.gelora.pengguna.BuildConfig;
 import com.gelora.pengguna.R;
 import com.gelora.pengguna.adapter.JamSewaAdapter;
 import com.gelora.pengguna.interfaces.OnJamClickListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.midtrans.sdk.corekit.callback.TransactionCallback;
+import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
+import com.midtrans.sdk.corekit.core.MidtransSDK;
+import com.midtrans.sdk.corekit.core.SdkCoreFlowBuilder;
+import com.midtrans.sdk.corekit.core.TransactionRequest;
+import com.midtrans.sdk.corekit.core.UIKitCustomSetting;
+import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
+import com.midtrans.sdk.corekit.models.CustomerDetails;
+import com.midtrans.sdk.corekit.models.ItemDetails;
+import com.midtrans.sdk.corekit.models.snap.CreditCard;
+import com.midtrans.sdk.corekit.models.snap.TransactionResult;
+import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -41,13 +56,15 @@ import static com.gelora.pengguna.adapter.LapanganAdapter.JENIS_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.KATEGORI_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 
-public class PesanLapanganActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener , OnJamClickListener {
+public class PesanLapanganActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener , OnJamClickListener, TransactionFinishedCallback {
 
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
     ImageView gambharLapangan, backButton;
-    DatabaseReference ref, ketersedianLapanganRef;
-    Button datePicker;
+    DatabaseReference ref, ketersedianLapanganRef, userNameRef;
+    Button datePicker, bayarButton;
     String idLapanganIntent, namaLapanganIntent, gambarLapanganIntent, kategoriLapanganIntent, jenisLapanganIntent;
+    public static String namaPemesan;
+    long totalHarga;
     long hargaLapanganIntent;
     ArrayList<String> jamArrayList;
     ArrayList<String> jamSewaArrayList;
@@ -55,6 +72,9 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     String textA;
     Locale locale = new Locale("id", "ID");
     NumberFormat n = NumberFormat.getCurrencyInstance(locale);
+    int idPesanan = 1;
+    int panjangArrayListJam;
+    int price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +92,24 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         backButton = findViewById(R.id.back_arrow);
         datePicker = findViewById(R.id.pilih_tanggal_button);
         jamSewaRecycler = findViewById(R.id.jam_sewa_recycler);
+        bayarButton = findViewById(R.id.bayar_button);
+
+        // ambil nama pemain
+        userNameRef = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("nama");
+        userNameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                namaPemesan = snapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        //inisiasi MidtransSDK
+        iniMidtransSDK();
 
         // ambil data dari Intent sebelumnya
         Intent intent = getIntent();
@@ -134,6 +172,43 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                 showDatePicker();
             }
         });
+        bayarButton.setOnClickListener(new View.OnClickListener() {
+            String harga = String.valueOf(totalHarga);
+            String name = "Sewa "+namaLapanganIntent;
+            @Override
+            public void onClick(View v) {
+                MidtransSDK.getInstance().setTransactionRequest(transactionRequest(String.valueOf(idPesanan), price,panjangArrayListJam,name));
+                MidtransSDK.getInstance().startPaymentUiFlow(PesanLapanganActivity.this);
+            }
+        });
+    }
+
+    private void iniMidtransSDK() {
+        SdkUIFlowBuilder.init()
+                .setContext(this)
+                .setMerchantBaseUrl(BuildConfig.MERCHANT_BASE_URL)
+                .setClientKey(BuildConfig.MERCHANT_CLIENT_KEY)
+                .setTransactionFinishedCallback(this)
+                .enableLog(true)
+                .setColorTheme(new CustomColorTheme("#FFE51255", "#34A853", "#FFE51255"))
+                .buildSDK();
+        UIKitCustomSetting uiKitCustomSetting = new UIKitCustomSetting();
+        uiKitCustomSetting.setSkipCustomerDetailsPages(true);
+        MidtransSDK.getInstance().setUIKitCustomSetting(uiKitCustomSetting);
+    }
+
+    public static TransactionRequest transactionRequest (String id, int price, int qty, String name){
+        TransactionRequest request = new TransactionRequest(System.currentTimeMillis()+"", price);
+        CustomerDetails cd = new CustomerDetails();
+        cd.setFirstName(namaPemesan);
+        request.setCustomerDetails(cd);
+        ItemDetails details = new ItemDetails(id, price, qty, name);
+        ArrayList<ItemDetails> itemDetails = new ArrayList<>();
+        itemDetails.add(details);
+        request.setItemDetails(itemDetails);
+
+        return  request;
+
     }
 
     void showDatePicker() {
@@ -212,10 +287,39 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         jamLapanganReview.setText(str);
         int multiplier = jamList.size();
         long harga = hargaLapanganIntent;
-        long totalHarga = harga * multiplier;
+        totalHarga = harga * multiplier;
+        panjangArrayListJam = jamList.size();
         String s = n.format(totalHarga);
         String a = s.replaceAll(",00","").replaceAll("Rp", "Rp. ");
         System.out.println(a);
         hargaLapanganReview.setText(a);
+        price = (int) totalHarga;
+    }
+
+    @Override
+    public void onTransactionFinished(TransactionResult transactionResult) {
+        if (transactionResult.getResponse() != null){
+            switch (transactionResult.getStatus()){
+                case TransactionResult.STATUS_SUCCESS:
+                    Toast.makeText(this, "Transaction Finished ID : "+transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
+                    break;
+                case TransactionResult.STATUS_PENDING:
+                    Toast.makeText(this, "Transaction Pending ID : "+transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
+                    break;
+                case TransactionResult.STATUS_FAILED:
+                    Toast.makeText(this, "Transaction Failed ID : "+transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            transactionResult.getResponse().getValidationMessages();
+        } else if (transactionResult.isTransactionCanceled()){
+            Toast.makeText(this, "Transaction Canceled", Toast.LENGTH_SHORT).show();
+            price = 0;
+        } else {
+            if (transactionResult.getStatus().equalsIgnoreCase(TransactionResult.STATUS_INVALID)){
+                Toast.makeText(this, "Transaction Invalid", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Transaction Finished with failure", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
-
+    flavorDimensions "mode"
     defaultConfig {
         applicationId "com.gelora.pengguna"
         minSdkVersion 23
@@ -15,6 +15,23 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    productFlavors{
+        sandbox{
+            applicationId = "com.gelora.pengguna"
+//            resValue "string", "app_name", "Gelora"
+            buildConfigField "String", "MERCHANT_BASE_URL", "\"https://gelora-midtrans-server.herokuapp.com/index.php/\""
+            buildConfigField "String", "MERCHANT_CLIENT_KEY", "\"SB-Mid-client-VqefGoCY5veFlwft\""
+
+        }
+
+//        production{
+//            applicationId = "com.gelora.pengguna.sandbox"
+//            resValue "string", "app_name", "Gelora Sandbox"
+//            buildConfigField "string", "MERCHANT_BASE_URL", "\"https://gelora-midtrans-server.herokuapp.com/index.php/\""
+//            buildConfigField "string", "MERCHANT_CLIENT_KEY", "\"SB-Mid-client-VqefGoCY5veFlwft\""
+//        }
     }
 
     buildTypes {
@@ -68,4 +85,7 @@ dependencies {
     // chip nav bar
     implementation 'com.ismaeldivita.chipnavigation:chip-navigation-bar:1.3.2'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.3.71'
+
+    // midtrans
+    implementation 'com.midtrans:uikit:1.23.2-SANDBOX'
 }
