@@ -80,6 +80,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pesan_lapangan);
+
         namaLapangan = findViewById(R.id.nama_lapangan_pesan);
         kategoriLapangan = findViewById(R.id.kategori_lapangan_pesan);
         jenisLapangan = findViewById(R.id.jenmis_lapangan_pesan);
@@ -322,7 +323,6 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
             transactionResult.getResponse().getValidationMessages();
         } else if (transactionResult.isTransactionCanceled()) {
             Toast.makeText(this, "Transaction Canceled", Toast.LENGTH_SHORT).show();
-            price = 0;
         } else {
             if (transactionResult.getStatus().equalsIgnoreCase(TransactionResult.STATUS_INVALID)) {
                 Toast.makeText(this, "Transaction Invalid", Toast.LENGTH_SHORT).show();
