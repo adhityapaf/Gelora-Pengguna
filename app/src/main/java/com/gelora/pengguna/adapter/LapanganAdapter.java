@@ -31,6 +31,7 @@ public class LapanganAdapter extends RecyclerView.Adapter<LapanganAdapter.ViewHo
     public static final String JENIS_LAPANGAN = "com.gelora.pengguna.jenis_lapangan";
     public static final String HARGA_LAPANGAN = "com.gelora.pengguna.harga_lapangan";
     public static final String GAMBAR_LAPANGAN = "com.gelora.pengguna.gambar_lapangan";
+    public static final String UID_MITRA = "com.gelora.pengguna.uid_mitra";
     public LapanganAdapter(ArrayList<LapanganData> lapanganData, Context mContext) {
         this.lapanganData = lapanganData;
         this.mContext = mContext;
@@ -71,6 +72,7 @@ public class LapanganAdapter extends RecyclerView.Adapter<LapanganAdapter.ViewHo
                 intent.putExtra(KATEGORI_LAPANGAN, kategoriLapanganStr);
                 intent.putExtra(JENIS_LAPANGAN, jenisLapanganStr);
                 intent.putExtra(HARGA_LAPANGAN, hargaLapanganStr);
+                intent.putExtra(UID_MITRA, lapanganData.get(position).getUID_Mitra());
                 mContext.startActivity(intent);
             }
         });

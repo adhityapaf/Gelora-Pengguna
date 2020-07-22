@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,6 +21,7 @@ import com.gelora.pengguna.BuildConfig;
 import com.gelora.pengguna.R;
 import com.gelora.pengguna.adapter.JamSewaAdapter;
 import com.gelora.pengguna.interfaces.OnJamClickListener;
+import com.gelora.pengguna.model.PesananData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,14 +57,16 @@ import static com.gelora.pengguna.adapter.LapanganAdapter.ID_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.JENIS_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.KATEGORI_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
+import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
 
 public class PesanLapanganActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, OnJamClickListener, TransactionFinishedCallback {
 
+    public static final String ID_PESANAN = "com.gelora.pengguna.id_pesanan";
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
     ImageView gambharLapangan, backButton;
-    DatabaseReference ref, ketersedianLapanganRef, userNameRef;
+    DatabaseReference ref, ketersedianLapanganRef, userNameRef, pesananRef, pemilikLpaanganRef;
     Button datePicker, bayarButton;
-    String idLapanganIntent, namaLapanganIntent, gambarLapanganIntent, kategoriLapanganIntent, jenisLapanganIntent;
+    String idLapanganIntent, namaLapanganIntent, gambarLapanganIntent, kategoriLapanganIntent, jenisLapanganIntent, UIDMitraIntent;
     public static String namaPemesan;
     long totalHarga;
     long hargaLapanganIntent;
@@ -72,9 +76,13 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     String textA;
     Locale locale = new Locale("id", "ID");
     NumberFormat n = NumberFormat.getCurrencyInstance(locale);
-    int idPesanan = 1;
+    int idPesanan = 0;
     int panjangArrayListJam;
     int price;
+    int total_pesanan;
+    String bukti_pembayaran = "belum ada";
+    String status_pesanan = "Belum Upload Bukti";
+    private static final String TAG = "PesanLapanganActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +117,26 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
             }
         });
 
+        // id pesanan counter
+        pesananRef = FirebaseDatabase.getInstance().getReference("pesanan");
+        pesananRef.child("pesanan_counter").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    idPesanan = Integer.parseInt(snapshot.getValue().toString());
+                } else {
+                    pesananRef.child("pesanan_counter").setValue(idPesanan);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
         //inisiasi MidtransSDK
         iniMidtransSDK();
 
@@ -120,6 +148,24 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         kategoriLapanganIntent = intent.getStringExtra(KATEGORI_LAPANGAN);
         jenisLapanganIntent = intent.getStringExtra(JENIS_LAPANGAN);
         hargaLapanganIntent = intent.getLongExtra(HARGA_LAPANGAN, 0);
+        UIDMitraIntent = intent.getStringExtra(UID_MITRA);
+        // pemilik lapangan ref
+        pemilikLpaanganRef = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMitraIntent);
+        pemilikLpaanganRef.child("total_pesanan").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    total_pesanan = Integer.parseInt(snapshot.getValue().toString());
+                } else {
+                    total_pesanan = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         //
         jamSewaRecycler.setHasFixedSize(true);
         jamSewaRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -177,7 +223,6 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
 
         // cek kondisi review section
         bayarButton.setOnClickListener(new View.OnClickListener() {
-            String harga = String.valueOf(totalHarga);
             String name = "Sewa " + namaLapanganIntent;
 
             @Override
@@ -312,9 +357,11 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
             switch (transactionResult.getStatus()) {
                 case TransactionResult.STATUS_SUCCESS:
                     Toast.makeText(this, "Transaction Finished ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
+                    passData();
                     break;
                 case TransactionResult.STATUS_PENDING:
                     Toast.makeText(this, "Transaction Pending ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
+                    passData();
                     break;
                 case TransactionResult.STATUS_FAILED:
                     Toast.makeText(this, "Transaction Failed ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
@@ -330,5 +377,23 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                 Toast.makeText(this, "Transaction Finished with failure", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void passData(){
+        idPesanan++;
+        total_pesanan++;
+        pesananRef.child("pesanan_counter").setValue(idPesanan);
+        pemilikLpaanganRef.child("total_pesanan").setValue(total_pesanan);
+        String jamlapanganText = jamLapanganReview.getText().toString();
+        String tanggalLapanganText = tanggalLapanganReview.getText().toString();
+        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan);
+        pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
+        pemilikLpaanganRef.child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
+        Log.d(TAG, "passData: Passing Data to Firebase");
+        Intent intent = new Intent(PesanLapanganActivity.this, UploadBuktiPembayaranActivity.class);
+        intent.putExtra(ID_PESANAN, String.valueOf(idPesanan));
+        intent.putExtra(UID_MITRA, UIDMitraIntent);
+        startActivity(intent);
+        finish();
     }
 }
