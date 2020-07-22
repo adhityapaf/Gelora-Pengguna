@@ -56,7 +56,7 @@ import static com.gelora.pengguna.adapter.LapanganAdapter.JENIS_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.KATEGORI_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 
-public class PesanLapanganActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener , OnJamClickListener, TransactionFinishedCallback {
+public class PesanLapanganActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, OnJamClickListener, TransactionFinishedCallback {
 
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
     ImageView gambharLapangan, backButton;
@@ -118,7 +118,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         gambarLapanganIntent = intent.getStringExtra(GAMBAR_LAPANGAN);
         kategoriLapanganIntent = intent.getStringExtra(KATEGORI_LAPANGAN);
         jenisLapanganIntent = intent.getStringExtra(JENIS_LAPANGAN);
-        hargaLapanganIntent = intent.getLongExtra(HARGA_LAPANGAN,0);
+        hargaLapanganIntent = intent.getLongExtra(HARGA_LAPANGAN, 0);
         //
         jamSewaRecycler.setHasFixedSize(true);
         jamSewaRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -131,8 +131,9 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         namaLapangan.setText(namaLapanganIntent);
         kategoriLapangan.setText(kategoriLapanganIntent);
         jenisLapangan.setText(jenisLapanganIntent);
+        tanggalLapanganReview.setText("");
         String hargaText = n.format(hargaLapanganIntent);
-        String hargaSetText = hargaText.replaceAll(",00","").replaceAll("Rp", "Rp. ");
+        String hargaSetText = hargaText.replaceAll(",00", "").replaceAll("Rp", "Rp. ");
         hargaLapangan.setText(hargaSetText);
         ref = FirebaseDatabase.getInstance().getReference("lapangan/id_lapangan").child(idLapanganIntent).child("jam_sewa");
         ref.addValueEventListener(new ValueEventListener() {
@@ -172,12 +173,22 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                 showDatePicker();
             }
         });
+
+        // cek kondisi review section
         bayarButton.setOnClickListener(new View.OnClickListener() {
             String harga = String.valueOf(totalHarga);
-            String name = "Sewa "+namaLapanganIntent;
+            String name = "Sewa " + namaLapanganIntent;
+
             @Override
             public void onClick(View v) {
-                MidtransSDK.getInstance().setTransactionRequest(transactionRequest(String.valueOf(idPesanan), price,panjangArrayListJam,name));
+                if (tanggalLapanganReview.getText().toString().equals("")){
+                    Toast.makeText(PesanLapanganActivity.this, "Silakan pilih tanggal terlebih dahulu", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (jamLapanganReview.getText().toString().equals("")){
+                    Toast.makeText(PesanLapanganActivity.this, "Silakan pilih jam bermain terlebih dahulu", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                MidtransSDK.getInstance().setTransactionRequest(transactionRequest(String.valueOf(idPesanan), price, 1, name));
                 MidtransSDK.getInstance().startPaymentUiFlow(PesanLapanganActivity.this);
             }
         });
@@ -190,15 +201,15 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                 .setClientKey(BuildConfig.MERCHANT_CLIENT_KEY)
                 .setTransactionFinishedCallback(this)
                 .enableLog(true)
-                .setColorTheme(new CustomColorTheme("#FFE51255", "#34A853", "#FFE51255"))
+                .setColorTheme(new CustomColorTheme("#34A853", "#34A853", "#FFE51255"))
                 .buildSDK();
         UIKitCustomSetting uiKitCustomSetting = new UIKitCustomSetting();
         uiKitCustomSetting.setSkipCustomerDetailsPages(true);
         MidtransSDK.getInstance().setUIKitCustomSetting(uiKitCustomSetting);
     }
 
-    public static TransactionRequest transactionRequest (String id, int price, int qty, String name){
-        TransactionRequest request = new TransactionRequest(System.currentTimeMillis()+"", price);
+    public static TransactionRequest transactionRequest(String id, int price, int qty, String name) {
+        TransactionRequest request = new TransactionRequest(System.currentTimeMillis() + "", price);
         CustomerDetails cd = new CustomerDetails();
         cd.setFirstName(namaPemesan);
         request.setCustomerDetails(cd);
@@ -206,9 +217,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         ArrayList<ItemDetails> itemDetails = new ArrayList<>();
         itemDetails.add(details);
         request.setItemDetails(itemDetails);
-
-        return  request;
-
+        return request;
     }
 
     void showDatePicker() {
@@ -242,8 +251,8 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 jamSewaArrayList = new ArrayList<>();
-                if (!snapshot.exists()){
-                    for (int i = 0; i < jamArrayList.size(); i++){
+                if (!snapshot.exists()) {
+                    for (int i = 0; i < jamArrayList.size(); i++) {
                         ketersedianLapanganRef.child(jamArrayList.get(i)).setValue("tersedia");
                     }
                     System.out.println(jamArrayList);
@@ -252,8 +261,8 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                     JamSewaAdapter jamSewaAdapter = new JamSewaAdapter(PesanLapanganActivity.this, jamArrayList, PesanLapanganActivity.this);
                     jamSewaRecycler.setAdapter(jamSewaAdapter);
                 } else {
-                    for (DataSnapshot ds : snapshot.getChildren()){
-                        if (ds.getValue().equals("tersedia")){
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        if (ds.getValue().equals("tersedia")) {
                             jamSewaArrayList.add(ds.getKey());
                         }
                     }
@@ -275,11 +284,11 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     @Override
     public void jamReview(ArrayList<String> jamList) {
         Collections.sort(jamList);
-        if (jamList.isEmpty()){
+        if (jamList.isEmpty()) {
             textA = "";
 
-        } else  {
-            for (int i =  0; i < jamList.size(); i++) {
+        } else {
+            for (int i = 0; i < jamList.size(); i++) {
                 textA = jamList.toString();
             }
         }
@@ -290,7 +299,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         totalHarga = harga * multiplier;
         panjangArrayListJam = jamList.size();
         String s = n.format(totalHarga);
-        String a = s.replaceAll(",00","").replaceAll("Rp", "Rp. ");
+        String a = s.replaceAll(",00", "").replaceAll("Rp", "Rp. ");
         System.out.println(a);
         hargaLapanganReview.setText(a);
         price = (int) totalHarga;
@@ -298,24 +307,24 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
 
     @Override
     public void onTransactionFinished(TransactionResult transactionResult) {
-        if (transactionResult.getResponse() != null){
-            switch (transactionResult.getStatus()){
+        if (transactionResult.getResponse() != null) {
+            switch (transactionResult.getStatus()) {
                 case TransactionResult.STATUS_SUCCESS:
-                    Toast.makeText(this, "Transaction Finished ID : "+transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Transaction Finished ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
                     break;
                 case TransactionResult.STATUS_PENDING:
-                    Toast.makeText(this, "Transaction Pending ID : "+transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Transaction Pending ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
                     break;
                 case TransactionResult.STATUS_FAILED:
-                    Toast.makeText(this, "Transaction Failed ID : "+transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Transaction Failed ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_SHORT).show();
                     break;
             }
             transactionResult.getResponse().getValidationMessages();
-        } else if (transactionResult.isTransactionCanceled()){
+        } else if (transactionResult.isTransactionCanceled()) {
             Toast.makeText(this, "Transaction Canceled", Toast.LENGTH_SHORT).show();
             price = 0;
         } else {
-            if (transactionResult.getStatus().equalsIgnoreCase(TransactionResult.STATUS_INVALID)){
+            if (transactionResult.getStatus().equalsIgnoreCase(TransactionResult.STATUS_INVALID)) {
                 Toast.makeText(this, "Transaction Invalid", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Transaction Finished with failure", Toast.LENGTH_SHORT).show();
