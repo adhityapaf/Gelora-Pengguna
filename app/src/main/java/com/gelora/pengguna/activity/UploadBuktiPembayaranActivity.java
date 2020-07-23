@@ -32,6 +32,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import static com.gelora.pengguna.activity.PesanLapanganActivity.ID_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESANAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
 
 public class UploadBuktiPembayaranActivity extends AppCompatActivity {
@@ -42,7 +43,7 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
     Button pilihGambarButton, uploadButton;
     ProgressBar progressBar;
     DatabaseReference ref;
-    String idPesanan, UIDMItra;
+    String idPesanan, UIDMItra, tanggalPesanan;
     StorageTask mUploadTask;
     StorageReference mStorageRef;
     DatabaseReference mDatabaseRef;
@@ -60,6 +61,7 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
         Intent intent = getIntent();
         idPesanan = intent.getStringExtra(ID_PESANAN);
         UIDMItra = intent.getStringExtra(UID_MITRA);
+        tanggalPesanan = intent.getStringExtra(TANGGAL_PESANAN);
 
         gambarBukti.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
@@ -89,11 +91,11 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
                     Toast.makeText(UploadBuktiPembayaranActivity.this, "Proses upload gambar sedang berlangsung, mohon bersabar.", Toast.LENGTH_SHORT).show();
                 } else {
                     if (mImageUri != null){
-                        mStorageRef = FirebaseStorage.getInstance().getReference("bukti_pembayaran").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("id_pesanan").child(idPesanan);
-                        mDatabaseRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("id_pesanan").child(idPesanan).child("bukti_pembayaran");
+                        mStorageRef = FirebaseStorage.getInstance().getReference("bukti_pembayaran").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanan).child("id_pesanan").child(idPesanan);
+                        mDatabaseRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanan).child("id_pesanan").child(idPesanan).child("bukti_pembayaran");
                         ref = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMItra).child("id_pesanan").child(idPesanan).child("bukti_pembayaran");
                         final DatabaseReference statusRef1 = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMItra).child("id_pesanan").child(idPesanan).child("status_pesanan");
-                        final DatabaseReference statusRef2 = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("id_pesanan").child(idPesanan).child("status_pesanan");
+                        final DatabaseReference statusRef2 = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanan).child("id_pesanan").child(idPesanan).child("status_pesanan");
                         StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+getFileExtension(mImageUri));
                         mUploadTask = fileReference.putFile(mImageUri)
                                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

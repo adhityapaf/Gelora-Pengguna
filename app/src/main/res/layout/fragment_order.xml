@@ -3,19 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.OrderFragment"
-    android:layout_margin="20dp">
-    <ScrollView
+    android:layout_margin="20dp"
+    tools:context=".fragment.OrderFragment">
+
+    <ProgressBar
+        android:id="@+id/progressbarlingkaran"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orderRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/orderRecycler"
-            android:orientation="vertical"
-            />
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
 
 
 </RelativeLayout>

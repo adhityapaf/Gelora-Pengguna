@@ -62,6 +62,7 @@ import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
 public class PesanLapanganActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, OnJamClickListener, TransactionFinishedCallback {
 
     public static final String ID_PESANAN = "com.gelora.pengguna.id_pesanan";
+    public static final String TANGGAL_PESANAN = "com.gelora.pengguna.tanggal_pesanan";
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
     ImageView gambharLapangan, backButton;
     DatabaseReference ref, ketersedianLapanganRef, userNameRef, pesananRef, pemilikLpaanganRef;
@@ -387,12 +388,13 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         String jamlapanganText = jamLapanganReview.getText().toString();
         String tanggalLapanganText = tanggalLapanganReview.getText().toString();
         PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan);
-        pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
+        pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalLapanganText).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
         pemilikLpaanganRef.child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
         Log.d(TAG, "passData: Passing Data to Firebase");
         Intent intent = new Intent(PesanLapanganActivity.this, UploadBuktiPembayaranActivity.class);
         intent.putExtra(ID_PESANAN, String.valueOf(idPesanan));
         intent.putExtra(UID_MITRA, UIDMitraIntent);
+        intent.putExtra(TANGGAL_PESANAN, tanggalLapanganText);
         startActivity(intent);
         finish();
     }
