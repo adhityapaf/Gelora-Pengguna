@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.gelora.pengguna.R;
+import com.gelora.pengguna.adapter.PesananAdapter;
 import com.gelora.pengguna.model.PesananData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +33,7 @@ public class OrderFragment extends Fragment {
     RecyclerView recyclerView;
     Context mContext;
     DatabaseReference orderRef;
-    ArrayList<PesananData> list;
+    ArrayList<String> list;
     ProgressBar progressBar;
     public OrderFragment() {
         // Required empty public constructor
@@ -48,7 +49,7 @@ public class OrderFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressbarlingkaran);
         progressBar.setVisibility(View.VISIBLE);
         mContext = getContext();
-        orderRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("id_pesanan");
+        orderRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         readData();
@@ -62,10 +63,11 @@ public class OrderFragment extends Fragment {
                 if (snapshot.exists()){
                     list = new ArrayList<>();
                     for (DataSnapshot ds  : snapshot.getChildren()){
-                        PesananData pd = ds.getValue(PesananData.class);
-                        list.add(pd);
+                        list.add(ds.getKey());
                     }
-
+                    PesananAdapter pesananAdapter = new PesananAdapter(list, getActivity());
+                    recyclerView.setAdapter(pesananAdapter);
+                    progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(mContext, "Pesananmu kosong, yuk pesan sekarang!", Toast.LENGTH_SHORT).show();
                 }
@@ -76,5 +78,6 @@ public class OrderFragment extends Fragment {
 
             }
         });
+        orderRef.keepSynced(true);
     }
 }

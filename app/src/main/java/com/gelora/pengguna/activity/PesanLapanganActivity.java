@@ -84,6 +84,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     String bukti_pembayaran = "belum ada";
     String status_pesanan = "Belum Upload Bukti";
     private static final String TAG = "PesanLapanganActivity";
+    String alasan_pesanan = "Tidak Ada";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -387,7 +388,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         pemilikLpaanganRef.child("total_pesanan").setValue(total_pesanan);
         String jamlapanganText = jamLapanganReview.getText().toString();
         String tanggalLapanganText = tanggalLapanganReview.getText().toString();
-        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan);
+        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan);
         pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalLapanganText).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
         pemilikLpaanganRef.child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
         Log.d(TAG, "passData: Passing Data to Firebase");
