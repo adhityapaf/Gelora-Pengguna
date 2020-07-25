@@ -19,20 +19,31 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.gelora.pengguna.R;
+import com.gelora.pengguna.model.PesananData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import static com.gelora.pengguna.activity.PesanLapanganActivity.ALASAN_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.BUKTI_PEMBAYARAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.ID_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.JAM_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.NAMA_PEMESAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.STATUS_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.TOTAL_HARGA;
+import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
 
 public class UploadBuktiPembayaranActivity extends AppCompatActivity {
@@ -42,8 +53,11 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
     ImageView gambarBukti, backButton;
     Button pilihGambarButton, uploadButton;
     ProgressBar progressBar;
-    DatabaseReference ref;
-    String idPesanan, UIDMItra, tanggalPesanan;
+    DatabaseReference ref, totalPesananRef;
+    String idPesanan,namaPemesan,bukti_pembayaran, jam_pesan, tanggalPesanan, statusPesanan, nama_lapangan, alasan_status, UIDMItra;
+    String statusPembayaran = "Sudah Upload Bukti";
+    int total_harga;
+    int total_pesanan;
     StorageTask mUploadTask;
     StorageReference mStorageRef;
     DatabaseReference mDatabaseRef;
@@ -60,8 +74,17 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
         // ambil data dari intent sebelumnya
         Intent intent = getIntent();
         idPesanan = intent.getStringExtra(ID_PESANAN);
-        UIDMItra = intent.getStringExtra(UID_MITRA);
+        namaPemesan = intent.getStringExtra(NAMA_PEMESAN);
+        total_harga = intent.getIntExtra(TOTAL_HARGA, 0);
+        bukti_pembayaran = intent.getStringExtra(BUKTI_PEMBAYARAN);
+        jam_pesan = intent.getStringExtra(JAM_PESANAN);
         tanggalPesanan = intent.getStringExtra(TANGGAL_PESANAN);
+        statusPesanan = intent.getStringExtra(STATUS_PESANAN);
+        nama_lapangan = intent.getStringExtra(NAMA_LAPANGAN);
+        alasan_status = intent.getStringExtra(ALASAN_PESANAN);
+        UIDMItra = intent.getStringExtra(UID_MITRA);
+        totalPesananRef = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMItra).child("total_pesanan");
+        readDataFirebase();
 
         gambarBukti.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
@@ -93,8 +116,8 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
                     if (mImageUri != null){
                         mStorageRef = FirebaseStorage.getInstance().getReference("bukti_pembayaran").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanan).child("id_pesanan").child(idPesanan);
                         mDatabaseRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanan).child("id_pesanan").child(idPesanan).child("bukti_pembayaran");
-                        ref = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMItra).child("id_pesanan").child(idPesanan).child("bukti_pembayaran");
-                        final DatabaseReference statusRef1 = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMItra).child("id_pesanan").child(idPesanan).child("status_pesanan");
+                        ref = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMItra).child(tanggalPesanan).child("id_pesanan").child(idPesanan).child("bukti_pembayaran");
+                        final DatabaseReference statusRef1 = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMItra).child(tanggalPesanan).child("id_pesanan").child(idPesanan).child("status_pesanan");
                         final DatabaseReference statusRef2 = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanan).child("id_pesanan").child(idPesanan).child("status_pesanan");
                         StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+getFileExtension(mImageUri));
                         mUploadTask = fileReference.putFile(mImageUri)
@@ -112,13 +135,20 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
                                         result.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                             @Override
                                             public void onSuccess(Uri uri) {
-                                                String downloadUrl = uri.toString();
-                                                mDatabaseRef.setValue(downloadUrl);
-                                                ref.setValue(downloadUrl);
-                                                statusRef1.setValue("Sudah Upload Bukti");
-                                                statusRef2.setValue("Sudah Upload Bukti");
+                                                bukti_pembayaran = uri.toString();
+                                                mDatabaseRef.setValue(bukti_pembayaran);
+                                                ref.setValue(bukti_pembayaran);
+                                                statusRef1.setValue(statusPembayaran);
+                                                statusRef2.setValue(statusPembayaran);
                                             }
                                         });
+                                        total_pesanan++;
+                                        totalPesananRef.setValue(total_pesanan);
+                                        PesananData pesananData = new PesananData(idPesanan, namaPemesan, total_harga, bukti_pembayaran,
+                                                jam_pesan, tanggalPesanan, statusPembayaran, nama_lapangan, alasan_status, UIDMItra);
+                                        DatabaseReference pesananMitra = FirebaseDatabase.getInstance().getReference("pesanan_pemilik")
+                                                .child(UIDMItra).child(tanggalPesanan).child("id_pesanan").child(idPesanan);
+                                        pesananMitra.setValue(pesananData);
                                         Toast.makeText(UploadBuktiPembayaranActivity.this, "Upload Bukti Pembayaran Berhasil!", Toast.LENGTH_SHORT).show();
                                         Intent intent1 = new Intent(UploadBuktiPembayaranActivity.this, BerhasilUploadActivity.class);
                                         intent1.putExtra(ID_PESANAN, idPesanan);
@@ -147,6 +177,27 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
         });
 
     }
+
+    private void readDataFirebase() {
+        totalPesananRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    total_pesanan = Integer.parseInt(snapshot.getValue().toString());
+                } else {
+                    total_pesanan = 0;
+                    totalPesananRef.setValue(total_pesanan);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        totalPesananRef.keepSynced(true);
+    }
+
     // milih gambar
     private void openFileChooser() {
         Intent intent = new Intent();
