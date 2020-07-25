@@ -2,17 +2,24 @@ package com.gelora.pengguna.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.gelora.pengguna.R;
 import com.gelora.pengguna.activity.PesanLapanganActivity;
 import com.gelora.pengguna.model.LapanganData;
@@ -49,7 +56,19 @@ public class LapanganAdapter extends RecyclerView.Adapter<LapanganAdapter.ViewHo
         Glide.with(mContext)
                 .load(lapanganData.get(position).getGambar_lapangan())
                 .centerCrop()
-                .placeholder(R.drawable.img_placeholder_lapangan)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
                 .into(holder.gambarLapangan);
         holder.namaLapangan.setText(lapanganData.get(position).getNama_lapangan());
         holder.kategoriLapangan.setText(lapanganData.get(position).getKategori_lapangan());
@@ -87,6 +106,7 @@ public class LapanganAdapter extends RecyclerView.Adapter<LapanganAdapter.ViewHo
         ImageView gambarLapangan;
         TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan;
         CardView lapanganCard;
+        ProgressBar progressBar;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             gambarLapangan = itemView.findViewById(R.id.img_lapangan);
@@ -95,7 +115,7 @@ public class LapanganAdapter extends RecyclerView.Adapter<LapanganAdapter.ViewHo
             jenisLapangan = itemView.findViewById(R.id.jenis_rumput);
             hargaLapangan = itemView.findViewById(R.id.harga_sewa);
             lapanganCard = itemView.findViewById(R.id.lapanganCard);
-
+            progressBar = itemView.findViewById(R.id.progressbarlingkaran);
         }
     }
 }

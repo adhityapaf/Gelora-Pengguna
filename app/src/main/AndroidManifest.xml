@@ -12,14 +12,19 @@
 
     <application
         android:allowBackup="true"
-        tools:replace="android:allowBackup"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:hardwareAccelerated="true">
-        <activity android:name=".activity.LapanganFavoritActivity"></activity>
+        tools:replace="android:allowBackup">
+        <activity android:name=".activity.ImagePreviewActivity"
+            android:theme="@style/AppTheme.DialogPop"/>
+        <activity android:name=".activity.DetailPesananActivity"
+            android:theme="@style/AppTheme.DialogPop"
+            />
+        <activity android:name=".activity.LapanganFavoritActivity" />
         <activity android:name=".activity.BerhasilUploadActivity" />
         <activity android:name=".activity.UploadBuktiPembayaranActivity" />
         <activity android:name=".activity.PesanLapanganActivity" />
