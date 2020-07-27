@@ -76,6 +76,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     public static final String TANGGAL_PESANAN = "com.gelora.pengguna.tanggal_pesanan";
     public static final String STATUS_PESANAN = "com.gelora.pengguna.status_pesanan";
     public static final String ALASAN_PESANAN = "com.gelora.pengguna.alasan_pesanan";
+    public static final String UID_PELANGGAN = "com.gelora.pengguna.uid_pelanggan";
 
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
     ImageView gambharLapangan, backButton;
@@ -99,6 +100,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     private static final String TAG = "PesanLapanganActivity";
     String alasan_pesanan = "Tidak Ada";
     ProgressBar progressBar;
+    String uid_pelanggan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -393,11 +395,12 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     }
 
     public void passData(){
+        uid_pelanggan = FirebaseAuth.getInstance().getCurrentUser().getUid();
         idPesanan++;
         pesananRef.child("pesanan_counter").setValue(idPesanan);
         String jamlapanganText = jamLapanganReview.getText().toString();
         String tanggalLapanganText = tanggalLapanganReview.getText().toString();
-        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan,UIDMitraIntent);
+        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan,UIDMitraIntent, uid_pelanggan);
         pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalLapanganText).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
         Log.d(TAG, "passData: Passing Data to Firebase");
         Intent intent = new Intent(PesanLapanganActivity.this, UploadBuktiPembayaranActivity.class);
@@ -411,6 +414,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         intent.putExtra(NAMA_LAPANGAN, namaLapanganIntent);
         intent.putExtra(ALASAN_PESANAN, alasan_pesanan);
         intent.putExtra(UID_MITRA, UIDMitraIntent);
+        intent.putExtra(UID_PELANGGAN, uid_pelanggan);
         startActivity(intent);
         finish();
     }

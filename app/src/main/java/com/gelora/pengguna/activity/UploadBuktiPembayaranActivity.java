@@ -43,6 +43,7 @@ import static com.gelora.pengguna.activity.PesanLapanganActivity.NAMA_PEMESAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.STATUS_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TOTAL_HARGA;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.UID_PELANGGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
 
@@ -54,7 +55,7 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
     Button pilihGambarButton, uploadButton;
     ProgressBar progressBar;
     DatabaseReference ref, totalPesananRef;
-    String idPesanan,namaPemesan,bukti_pembayaran, jam_pesan, tanggalPesanan, statusPesanan, nama_lapangan, alasan_status, UIDMItra;
+    String idPesanan,namaPemesan,bukti_pembayaran, jam_pesan, tanggalPesanan, statusPesanan, nama_lapangan, alasan_status, UIDMItra, UIDPelanggan;
     String statusPembayaran = "Sudah Upload Bukti";
     int total_harga;
     int total_pesanan;
@@ -83,6 +84,7 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
         nama_lapangan = intent.getStringExtra(NAMA_LAPANGAN);
         alasan_status = intent.getStringExtra(ALASAN_PESANAN);
         UIDMItra = intent.getStringExtra(UID_MITRA);
+        UIDPelanggan = intent.getStringExtra(UID_PELANGGAN);
         totalPesananRef = FirebaseDatabase.getInstance().getReference("pesanan_pemilik").child(UIDMItra).child("total_pesanan");
         readDataFirebase();
 
@@ -145,7 +147,7 @@ public class UploadBuktiPembayaranActivity extends AppCompatActivity {
                                         total_pesanan++;
                                         totalPesananRef.setValue(total_pesanan);
                                         PesananData pesananData = new PesananData(idPesanan, namaPemesan, total_harga, bukti_pembayaran,
-                                                jam_pesan, tanggalPesanan, statusPembayaran, nama_lapangan, alasan_status, UIDMItra);
+                                                jam_pesan, tanggalPesanan, statusPembayaran, nama_lapangan, alasan_status, UIDMItra, UIDPelanggan);
                                         DatabaseReference pesananMitra = FirebaseDatabase.getInstance().getReference("pesanan_pemilik")
                                                 .child(UIDMItra).child(tanggalPesanan).child("id_pesanan").child(idPesanan);
                                         pesananMitra.setValue(pesananData);
