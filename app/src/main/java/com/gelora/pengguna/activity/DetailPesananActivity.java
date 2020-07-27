@@ -1,7 +1,9 @@
 package com.gelora.pengguna.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,7 +39,7 @@ import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
 public class DetailPesananActivity extends AppCompatActivity {
     TextView idTransaksi, tanggalPesan, waktuPesan,  namaPemesan, namaLapangan, totalHarga, statusPesanan;
     ImageView statusIcon;
-    Button buktiTransferButton;
+    Button buktiTransferButton, batalkanButton;
     String idTransaksiIntent,namaPemesanIntent, buktiPembayaranIntent, jamPesanIntent, tanggalPesanIntent, statusPesanIntent, namaLapanganIntent, alasanPesananIntent, UIDMitraIntent;
     int totalHargaIntent;
     String forUploadText = "belum ada";
@@ -45,6 +47,7 @@ public class DetailPesananActivity extends AppCompatActivity {
     Locale locale = new Locale("id", "ID");
     NumberFormat n = NumberFormat.getCurrencyInstance(locale);
     String s, a;
+    DatabaseReference hapusRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,7 @@ public class DetailPesananActivity extends AppCompatActivity {
         statusPesanan = findViewById(R.id.statusPesananText);
         statusIcon = findViewById(R.id.statusIcon);
         buktiTransferButton = findViewById(R.id.lihatBuktiTransfer_button);
+        batalkanButton = findViewById(R.id.tolak_button);
 
         retrieveIntent();
         settingText();
@@ -81,6 +85,7 @@ public class DetailPesananActivity extends AppCompatActivity {
             statusPesanan.setText(alasanPesananIntent);
         }
 
+        hapusRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanIntent).child("id_pesanan").child(idTransaksiIntent);
         // membuat tampilan seperti pop up
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -120,6 +125,31 @@ public class DetailPesananActivity extends AppCompatActivity {
                 }
             }
         });
+
+        batalkanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog alertDialog = new AlertDialog.Builder(DetailPesananActivity.this).create();
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailPesananActivity.this);
+                builder.setTitle("Batalkan Pesanan");
+                builder.setMessage("Apakah Anda yakin untuk membatalkan pesanan ini?");
+                builder.setPositiveButton("Batalkan", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        hapusRef.removeValue();
+                        Toast.makeText(DetailPesananActivity.this, "Pesanan dibatalkan", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("Kembali", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
     private void retrieveIntent() {
@@ -148,6 +178,11 @@ public class DetailPesananActivity extends AppCompatActivity {
         statusPesanan.setText(statusPesanIntent);
         statusPesanan.setTextColor(Color.BLACK);
         statusIcon.setVisibility(View.INVISIBLE);
+        if (statusPesanIntent.equals("Belum Upload Bukti")){
+            batalkanButton.setVisibility(View.VISIBLE);
+        } else {
+            batalkanButton.setVisibility(View.GONE);
+        }
     }
 
 }

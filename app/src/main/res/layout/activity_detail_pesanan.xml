@@ -215,6 +215,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/horizontaldivider"
+            android:id="@+id/textRelative"
             android:layout_centerHorizontal="true"
             >
             <TextView
@@ -240,6 +241,20 @@
                 android:layout_centerVertical="true"
                 android:visibility="visible" />
         </RelativeLayout>
-
+        <Button
+            android:id="@+id/tolak_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textRelative"
+            android:layout_marginTop="20dp"
+            android:layout_toStartOf="@id/horizontaldivider"
+            android:background="@drawable/button_red_rounded"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="sans-serif"
+            android:text="Batalkan Pesanan"
+            android:textAllCaps="false"
+            android:textColor="@color/putih"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
