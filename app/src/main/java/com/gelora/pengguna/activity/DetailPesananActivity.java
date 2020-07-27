@@ -66,6 +66,7 @@ public class DetailPesananActivity extends AppCompatActivity {
             statusIcon.setVisibility(View.VISIBLE);
         } else if (statusPesanan.getText().toString().equals("Ditolak")){
             statusPesanan.setTextColor(Color.RED);
+            statusIcon.setVisibility(View.VISIBLE);
             Glide.with(getApplicationContext())
                     .load(R.drawable.ic_ditolak)
                     .into(statusIcon);
