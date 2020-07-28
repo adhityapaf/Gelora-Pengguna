@@ -24,6 +24,7 @@ import static com.gelora.pengguna.activity.PesanLapanganActivity.JAM_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.NAMA_PEMESAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.STATUS_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESAN_USER;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TOTAL_HARGA;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
@@ -63,6 +64,7 @@ public class PesananListAdapter extends RecyclerView.Adapter<PesananListAdapter.
                 intent.putExtra(NAMA_LAPANGAN, pesananData.get(position).getNama_lapangan());
                 intent.putExtra(ALASAN_PESANAN, pesananData.get(position).getAlasan_status());
                 intent.putExtra(UID_MITRA, pesananData.get(position).getUid_mitra());
+                intent.putExtra(TANGGAL_PESAN_USER, pesananData.get(position).getTanggal_pesan_user());
                 mContext.startActivity(intent);
             }
         });

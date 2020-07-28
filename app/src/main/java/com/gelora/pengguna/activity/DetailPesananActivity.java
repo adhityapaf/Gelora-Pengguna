@@ -32,6 +32,7 @@ import static com.gelora.pengguna.activity.PesanLapanganActivity.JAM_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.NAMA_PEMESAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.STATUS_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESAN_USER;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TOTAL_HARGA;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
@@ -40,7 +41,7 @@ public class DetailPesananActivity extends AppCompatActivity {
     TextView idTransaksi, tanggalPesan, waktuPesan,  namaPemesan, namaLapangan, totalHarga, statusPesanan;
     ImageView statusIcon;
     Button buktiTransferButton, batalkanButton;
-    String idTransaksiIntent,namaPemesanIntent, buktiPembayaranIntent, jamPesanIntent, tanggalPesanIntent, statusPesanIntent, namaLapanganIntent, alasanPesananIntent, UIDMitraIntent;
+    String idTransaksiIntent,namaPemesanIntent, buktiPembayaranIntent, jamPesanIntent, tanggalPesanIntent, statusPesanIntent, namaLapanganIntent, alasanPesananIntent, UIDMitraIntent, tanggalPesanUserIntent;
     int totalHargaIntent;
     String forUploadText = "belum ada";
     String alasanDefault = "Tidak Ada";
@@ -85,7 +86,7 @@ public class DetailPesananActivity extends AppCompatActivity {
             statusPesanan.setText(alasanPesananIntent);
         }
 
-        hapusRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanIntent).child("id_pesanan").child(idTransaksiIntent);
+        hapusRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanUserIntent).child("id_pesanan").child(idTransaksiIntent);
         // membuat tampilan seperti pop up
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -164,6 +165,7 @@ public class DetailPesananActivity extends AppCompatActivity {
         namaLapanganIntent = intent.getStringExtra(NAMA_LAPANGAN);
         alasanPesananIntent = intent.getStringExtra(ALASAN_PESANAN);
         UIDMitraIntent = intent.getStringExtra(UID_MITRA);
+        tanggalPesanUserIntent = intent.getStringExtra(TANGGAL_PESAN_USER);
         s = n.format(totalHargaIntent);
         a = s.replaceAll(",00", "").replaceAll("Rp", "Rp. ");
     }

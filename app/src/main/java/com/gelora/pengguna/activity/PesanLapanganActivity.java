@@ -51,10 +51,12 @@ import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -77,6 +79,8 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     public static final String STATUS_PESANAN = "com.gelora.pengguna.status_pesanan";
     public static final String ALASAN_PESANAN = "com.gelora.pengguna.alasan_pesanan";
     public static final String UID_PELANGGAN = "com.gelora.pengguna.uid_pelanggan";
+    public static final String TANGGAL_PESAN_USER = "com.gelora.pengguna.tanggal_pesan_user";
+
 
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
     ImageView gambharLapangan, backButton;
@@ -101,6 +105,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     String alasan_pesanan = "Tidak Ada";
     ProgressBar progressBar;
     String uid_pelanggan;
+    String tanggalHariIni;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +163,9 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
 
         //inisiasi MidtransSDK
         iniMidtransSDK();
+
+        // ambil tanggal hari ini
+        hariniTanggalBerapa();
 
         // ambil data dari Intent sebelumnya
         Intent intent = getIntent();
@@ -253,6 +261,12 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                 MidtransSDK.getInstance().startPaymentUiFlow(PesanLapanganActivity.this);
             }
         });
+    }
+
+    private void hariniTanggalBerapa() {
+        Calendar c = Calendar.getInstance();
+        tanggalHariIni = DateFormat.getDateInstance(DateFormat.FULL, locale).format(c.getTime());
+        System.out.println("Tanggal hari ini : "+tanggalHariIni);
     }
 
     private void iniMidtransSDK() {
@@ -400,8 +414,8 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         pesananRef.child("pesanan_counter").setValue(idPesanan);
         String jamlapanganText = jamLapanganReview.getText().toString();
         String tanggalLapanganText = tanggalLapanganReview.getText().toString();
-        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan,UIDMitraIntent, uid_pelanggan);
-        pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalLapanganText).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
+        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan,UIDMitraIntent, uid_pelanggan, tanggalHariIni);
+        pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalHariIni).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
         Log.d(TAG, "passData: Passing Data to Firebase");
         Intent intent = new Intent(PesanLapanganActivity.this, UploadBuktiPembayaranActivity.class);
         intent.putExtra(ID_PESANAN, String.valueOf(idPesanan));
@@ -415,6 +429,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         intent.putExtra(ALASAN_PESANAN, alasan_pesanan);
         intent.putExtra(UID_MITRA, UIDMitraIntent);
         intent.putExtra(UID_PELANGGAN, uid_pelanggan);
+        intent.putExtra(TANGGAL_PESAN_USER, tanggalHariIni);
         startActivity(intent);
         finish();
     }

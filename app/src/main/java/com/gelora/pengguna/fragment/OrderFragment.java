@@ -70,6 +70,7 @@ public class OrderFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(mContext, "Pesananmu kosong, yuk pesan sekarang!", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
