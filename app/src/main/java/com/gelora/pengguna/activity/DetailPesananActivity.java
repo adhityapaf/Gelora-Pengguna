@@ -38,8 +38,7 @@ import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
 
 public class DetailPesananActivity extends AppCompatActivity {
-    TextView idTransaksi, tanggalPesan, waktuPesan,  namaPemesan, namaLapangan, totalHarga, statusPesanan;
-    ImageView statusIcon;
+    TextView idTransaksi, tanggalPesan, waktuPesan,  namaPemesan, namaLapangan, totalHarga, statusLabel, statusField, jadwalLapanganField;
     Button buktiTransferButton, batalkanButton;
     String idTransaksiIntent,namaPemesanIntent, buktiPembayaranIntent, jamPesanIntent, tanggalPesanIntent, statusPesanIntent, namaLapanganIntent, alasanPesananIntent, UIDMitraIntent, tanggalPesanUserIntent;
     int totalHargaIntent;
@@ -59,31 +58,30 @@ public class DetailPesananActivity extends AppCompatActivity {
         namaPemesan = findViewById(R.id.namaPemesan_field);
         namaLapangan = findViewById(R.id.namaLapanganPesanan_field);
         totalHarga = findViewById(R.id.totalHarga_amount);
-        statusPesanan = findViewById(R.id.statusPesananText);
-        statusIcon = findViewById(R.id.statusIcon);
         buktiTransferButton = findViewById(R.id.lihatBuktiTransfer_button);
         batalkanButton = findViewById(R.id.tolak_button);
-
+        statusLabel = findViewById(R.id.alasan_ditolak_label);
+        statusField = findViewById(R.id.alasan_ditolak_field);
+        jadwalLapanganField = findViewById(R.id.jadwalLapanganField);
         retrieveIntent();
         settingText();
-        if (statusPesanan.getText().toString().equals("Diterima")){
-            statusPesanan.setTextColor(Color.parseColor("#34A853"));
-            statusIcon.setVisibility(View.VISIBLE);
-        } else if (statusPesanan.getText().toString().equals("Ditolak")){
-            statusPesanan.setTextColor(Color.RED);
-            statusIcon.setVisibility(View.VISIBLE);
-            Glide.with(getApplicationContext())
-                    .load(R.drawable.ic_ditolak)
-                    .into(statusIcon);
+        if (statusPesanIntent.equals("Diterima")){
+            statusLabel.setText("ALASAN DITERIMA");
+            statusField.setTextColor(Color.parseColor("#34A853"));
+            statusField.setText(alasanPesananIntent);
+        } else if (statusPesanIntent.equals("Ditolak")){
+            statusLabel.setText("ALASAN DITOLAK");
+            statusField.setText(alasanPesananIntent);
+            statusField.setTextColor(Color.RED);
         }
         if (buktiPembayaranIntent.equals(forUploadText)){
             buktiTransferButton.setText("Upload Bukti Pembayaran");
         }
 
         if (alasanPesananIntent.equals(alasanDefault)){
-            statusPesanan.setText(statusPesanIntent);
+            statusField.setText(statusPesanIntent);
         } else {
-            statusPesanan.setText(alasanPesananIntent);
+            statusField.setText(alasanPesananIntent);
         }
 
         hapusRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanUserIntent).child("id_pesanan").child(idTransaksiIntent);
@@ -118,6 +116,7 @@ public class DetailPesananActivity extends AppCompatActivity {
                     intent.putExtra(NAMA_LAPANGAN, namaLapanganIntent);
                     intent.putExtra(ALASAN_PESANAN, alasanPesananIntent);
                     intent.putExtra(UID_MITRA, UIDMitraIntent);
+                    intent.putExtra(TANGGAL_PESAN_USER, tanggalPesanUserIntent);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(DetailPesananActivity.this, ImagePreviewActivity.class);
@@ -172,14 +171,15 @@ public class DetailPesananActivity extends AppCompatActivity {
 
     private void settingText() {
         idTransaksi.setText(idTransaksiIntent);
-        tanggalPesan.setText(tanggalPesanIntent);
+        tanggalPesan.setText(tanggalPesanUserIntent);
+        jadwalLapanganField.setText(tanggalPesanIntent);
         waktuPesan.setText(jamPesanIntent);
         namaPemesan.setText(namaPemesanIntent);
         namaLapangan.setText(namaLapanganIntent);
         totalHarga.setText(a);
-        statusPesanan.setText(statusPesanIntent);
-        statusPesanan.setTextColor(Color.BLACK);
-        statusIcon.setVisibility(View.INVISIBLE);
+        statusField.setText(alasanPesananIntent);
+        statusField.setTextColor(Color.BLACK);
+        statusLabel.setText("STATUS PESANAN");
         if (statusPesanIntent.equals("Belum Upload Bukti")){
             batalkanButton.setVisibility(View.VISIBLE);
         } else {
