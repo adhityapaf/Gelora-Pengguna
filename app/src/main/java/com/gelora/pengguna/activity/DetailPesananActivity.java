@@ -34,13 +34,14 @@ import static com.gelora.pengguna.activity.PesanLapanganActivity.STATUS_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESAN_USER;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TOTAL_HARGA;
+import static com.gelora.pengguna.adapter.LapanganAdapter.ID_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.UID_MITRA;
 
 public class DetailPesananActivity extends AppCompatActivity {
     TextView idTransaksi, tanggalPesan, waktuPesan,  namaPemesan, namaLapangan, totalHarga, statusLabel, statusField, jadwalLapanganField;
     Button buktiTransferButton, batalkanButton;
-    String idTransaksiIntent,namaPemesanIntent, buktiPembayaranIntent, jamPesanIntent, tanggalPesanIntent, statusPesanIntent, namaLapanganIntent, alasanPesananIntent, UIDMitraIntent, tanggalPesanUserIntent;
+    String idTransaksiIntent,namaPemesanIntent, buktiPembayaranIntent, jamPesanIntent, tanggalPesanIntent, statusPesanIntent, namaLapanganIntent, alasanPesananIntent, UIDMitraIntent, tanggalPesanUserIntent, idLapanganIntent;
     int totalHargaIntent;
     String forUploadText = "belum ada";
     String alasanDefault = "Tidak Ada";
@@ -117,6 +118,7 @@ public class DetailPesananActivity extends AppCompatActivity {
                     intent.putExtra(ALASAN_PESANAN, alasanPesananIntent);
                     intent.putExtra(UID_MITRA, UIDMitraIntent);
                     intent.putExtra(TANGGAL_PESAN_USER, tanggalPesanUserIntent);
+                    intent.putExtra(ID_LAPANGAN, idLapanganIntent);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(DetailPesananActivity.this, ImagePreviewActivity.class);
@@ -165,6 +167,7 @@ public class DetailPesananActivity extends AppCompatActivity {
         alasanPesananIntent = intent.getStringExtra(ALASAN_PESANAN);
         UIDMitraIntent = intent.getStringExtra(UID_MITRA);
         tanggalPesanUserIntent = intent.getStringExtra(TANGGAL_PESAN_USER);
+        idLapanganIntent = intent.getStringExtra(ID_LAPANGAN);
         s = n.format(totalHargaIntent);
         a = s.replaceAll(",00", "").replaceAll("Rp", "Rp. ");
     }

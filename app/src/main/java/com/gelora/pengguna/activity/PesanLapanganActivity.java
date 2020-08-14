@@ -414,7 +414,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         pesananRef.child("pesanan_counter").setValue(idPesanan);
         String jamlapanganText = jamLapanganReview.getText().toString();
         String tanggalLapanganText = tanggalLapanganReview.getText().toString();
-        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan,UIDMitraIntent, uid_pelanggan, tanggalHariIni);
+        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan,UIDMitraIntent, uid_pelanggan, tanggalHariIni, idLapanganIntent);
         pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalHariIni).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
         Log.d(TAG, "passData: Passing Data to Firebase");
         Intent intent = new Intent(PesanLapanganActivity.this, UploadBuktiPembayaranActivity.class);
@@ -430,6 +430,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         intent.putExtra(UID_MITRA, UIDMitraIntent);
         intent.putExtra(UID_PELANGGAN, uid_pelanggan);
         intent.putExtra(TANGGAL_PESAN_USER, tanggalHariIni);
+        intent.putExtra(ID_LAPANGAN, idLapanganIntent);
         startActivity(intent);
         finish();
     }
