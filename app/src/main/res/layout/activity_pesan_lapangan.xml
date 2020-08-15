@@ -334,4 +334,16 @@
             android:textStyle="bold"
             android:id="@+id/bayar_button"/>
     </RelativeLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_fav_border_only"
+        android:tint="@color/hitam"
+        android:translationZ="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="22dp"
+        android:id="@+id/favoritLapanganButton"
+        />
+
 </RelativeLayout>

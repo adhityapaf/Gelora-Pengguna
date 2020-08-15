@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -80,11 +81,12 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     public static final String ALASAN_PESANAN = "com.gelora.pengguna.alasan_pesanan";
     public static final String UID_PELANGGAN = "com.gelora.pengguna.uid_pelanggan";
     public static final String TANGGAL_PESAN_USER = "com.gelora.pengguna.tanggal_pesan_user";
+    public static final String FAVORIT_LAPANGAN = "com.gelora.pengguna.favorit_lapangan";
 
 
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
-    ImageView gambharLapangan, backButton;
-    DatabaseReference ref, ketersedianLapanganRef, userNameRef, pesananRef, pemilikLpaanganRef;
+    ImageView gambharLapangan, backButton, favoritButton;
+    DatabaseReference ref, ketersedianLapanganRef, userNameRef, pesananRef, pemilikLpaanganRef, favRef;
     Button datePicker, bayarButton;
     String idLapanganIntent, namaLapanganIntent, gambarLapanganIntent, kategoriLapanganIntent, jenisLapanganIntent, UIDMitraIntent;
     public static String namaPemesan;
@@ -106,6 +108,13 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     ProgressBar progressBar;
     String uid_pelanggan;
     String tanggalHariIni;
+    Boolean isFavorited = false;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +135,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         jamSewaRecycler = findViewById(R.id.jam_sewa_recycler);
         bayarButton = findViewById(R.id.bayar_button);
         progressBar = findViewById(R.id.progressbarlingkaran);
+        favoritButton = findViewById(R.id.favoritLapanganButton);
 
         // ambil nama pemain
         userNameRef = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("nama");
@@ -168,7 +178,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         hariniTanggalBerapa();
 
         // ambil data dari Intent sebelumnya
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         idLapanganIntent = intent.getStringExtra(ID_LAPANGAN);
         namaLapanganIntent = intent.getStringExtra(NAMA_LAPANGAN);
         gambarLapanganIntent = intent.getStringExtra(GAMBAR_LAPANGAN);
@@ -176,6 +186,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         jenisLapanganIntent = intent.getStringExtra(JENIS_LAPANGAN);
         hargaLapanganIntent = intent.getLongExtra(HARGA_LAPANGAN, 0);
         UIDMitraIntent = intent.getStringExtra(UID_MITRA);
+        isFavorited = intent.getBooleanExtra(FAVORIT_LAPANGAN, false);
 
         //
         jamSewaRecycler.setHasFixedSize(true);
@@ -259,6 +270,62 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                 }
                 MidtransSDK.getInstance().setTransactionRequest(transactionRequest(String.valueOf(idPesanan), price, 1, name));
                 MidtransSDK.getInstance().startPaymentUiFlow(PesanLapanganActivity.this);
+            }
+        });
+
+
+        favRef = FirebaseDatabase.getInstance().getReference("favorit_lapangan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(idLapanganIntent);
+        favRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    isFavorited = true;
+                } else {
+                    isFavorited = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        if (isFavorited == true){
+            Glide.with(PesanLapanganActivity.this)
+                    .load(R.drawable.ic_favorit_solid)
+                    .centerCrop()
+                    .override(80)
+                    .into(favoritButton);
+            favoritButton.setColorFilter(Color.RED);
+        } else if (isFavorited == false){
+            Glide.with(PesanLapanganActivity.this)
+                    .load(R.drawable.ic_fav_border_only)
+                    .centerCrop()
+                    .override(80)
+                    .into(favoritButton);
+            favoritButton.setColorFilter(Color.BLACK);
+        }
+        // favorite
+        favoritButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFavorited == false){
+                    Glide.with(PesanLapanganActivity.this)
+                            .load(R.drawable.ic_favorit_solid)
+                            .into(favoritButton);
+                    isFavorited = true;
+                    favoritButton.setColorFilter(Color.RED);
+                    favRef.setValue(namaLapanganIntent);
+                    Toast.makeText(PesanLapanganActivity.this, "Favorit "+namaLapanganIntent+" berhasil!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Glide.with(PesanLapanganActivity.this)
+                            .load(R.drawable.ic_fav_border_only)
+                            .into(favoritButton);
+                    isFavorited = false;
+                    favoritButton.setColorFilter(Color.BLACK);
+                    favRef.removeValue();
+                    Toast.makeText(PesanLapanganActivity.this, "Batalkan Favorit "+namaLapanganIntent, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
