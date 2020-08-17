@@ -275,42 +275,34 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
 
 
         favRef = FirebaseDatabase.getInstance().getReference("favorit_lapangan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(idLapanganIntent);
-        favRef.addValueEventListener(new ValueEventListener() {
+        readFav(new FirebaseCallback() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    isFavorited = true;
-                } else {
-                    isFavorited = false;
+            public void favorit(Boolean favBool) {
+                isFavorited = favBool;
+                if (isFavorited == true){
+                    Glide.with(getApplicationContext())
+                            .load(R.drawable.ic_favorit_solid)
+                            .centerCrop()
+                            .override(80)
+                            .into(favoritButton);
+                    favoritButton.setColorFilter(Color.RED);
+                } else if (isFavorited == false){
+                    Glide.with(getApplicationContext())
+                            .load(R.drawable.ic_fav_border_only)
+                            .centerCrop()
+                            .override(80)
+                            .into(favoritButton);
+                    favoritButton.setColorFilter(Color.BLACK);
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
         });
-        if (isFavorited == true){
-            Glide.with(PesanLapanganActivity.this)
-                    .load(R.drawable.ic_favorit_solid)
-                    .centerCrop()
-                    .override(80)
-                    .into(favoritButton);
-            favoritButton.setColorFilter(Color.RED);
-        } else if (isFavorited == false){
-            Glide.with(PesanLapanganActivity.this)
-                    .load(R.drawable.ic_fav_border_only)
-                    .centerCrop()
-                    .override(80)
-                    .into(favoritButton);
-            favoritButton.setColorFilter(Color.BLACK);
-        }
+
         // favorite
         favoritButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isFavorited == false){
-                    Glide.with(PesanLapanganActivity.this)
+                    Glide.with(getApplicationContext())
                             .load(R.drawable.ic_favorit_solid)
                             .into(favoritButton);
                     isFavorited = true;
@@ -318,7 +310,7 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
                     favRef.setValue(namaLapanganIntent);
                     Toast.makeText(PesanLapanganActivity.this, "Favorit "+namaLapanganIntent+" berhasil!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Glide.with(PesanLapanganActivity.this)
+                    Glide.with(getApplicationContext())
                             .load(R.drawable.ic_fav_border_only)
                             .into(favoritButton);
                     isFavorited = false;
@@ -330,6 +322,26 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         });
     }
 
+    private void readFav(final FirebaseCallback firebaseCallback){
+        favRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    firebaseCallback.favorit(true);
+                } else {
+                    firebaseCallback.favorit(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private interface FirebaseCallback{
+        void favorit(Boolean favBool);
+    }
     private void hariniTanggalBerapa() {
         Calendar c = Calendar.getInstance();
         tanggalHariIni = DateFormat.getDateInstance(DateFormat.FULL, locale).format(c.getTime());
