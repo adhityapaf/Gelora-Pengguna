@@ -74,6 +74,12 @@ public class AkunActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        lapanganFavorit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AkunActivity.this, LapanganFavoritActivity.class));
+            }
+        });
     }
     void loadProfileUser() {
         userRef.child("email").addValueEventListener(new ValueEventListener() {
