@@ -139,6 +139,13 @@
         android:layout_height="match_parent"
         android:layout_below="@id/header_relative" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_relative"
+        android:layout_above="@id/bottom_nav"/>
+
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"

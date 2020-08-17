@@ -102,11 +102,14 @@ public class LapanganAdapter extends RecyclerView.Adapter<LapanganAdapter.ViewHo
         return lapanganData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView gambarLapangan;
-        TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan;
-        CardView lapanganCard;
-        ProgressBar progressBar;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView gambarLapangan;
+        public TextView namaLapangan;
+        public TextView kategoriLapangan;
+        public TextView jenisLapangan;
+        public TextView hargaLapangan;
+        public CardView lapanganCard;
+        public ProgressBar progressBar;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             gambarLapangan = itemView.findViewById(R.id.img_lapangan);
