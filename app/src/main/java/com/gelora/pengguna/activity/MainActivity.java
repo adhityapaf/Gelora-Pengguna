@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout fragmentContainer;
     FirebaseRecyclerOptions<LapanganData> options;
     FirebaseRecyclerAdapter<LapanganData, LapanganAdapter.ViewHolder> adapter;
+    ImageView searchButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         namaPemain = findViewById(R.id.username);
         progressBar = findViewById(R.id.progressbarlingkaran);
         searchbox = findViewById(R.id.searchbox_lapangan);
+        searchButton = findViewById(R.id.searchIconButton);
         searchRecycler = findViewById(R.id.searchRecycler);
         searchRecycler.setHasFixedSize(true);
         searchRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -150,9 +153,21 @@ public class MainActivity extends AppCompatActivity {
                     fragmentContainer.setVisibility(View.GONE);
                     searchRecycler.setVisibility(View.VISIBLE);
                     setAdapter(s.toString());
+                    Glide.with(getApplicationContext())
+                            .load(R.drawable.ic_baseline_clear_24)
+                            .into(searchButton);
+                    searchButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            searchbox.setText("");
+                        }
+                    });
                 } else {
                     fragmentContainer.setVisibility(View.VISIBLE);
                     searchRecycler.setVisibility(View.GONE);
+                    Glide.with(getApplicationContext())
+                            .load(R.drawable.ic_search_black_24dp)
+                            .into(searchButton);
                 }
             }
         });

@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class AkunActivity extends AppCompatActivity {
     private static final String TAG = "AkunActivity";
-    Button logout, simpanPerubahan, lapanganFavorit;
+    Button logout, simpanPerubahan, lapanganFavorit, tentangKami;
     EditText namaMitra, emailMitra, passwordMitra;
     DatabaseReference userRef;
     String nama, email, passwrd;
@@ -38,6 +38,8 @@ public class AkunActivity extends AppCompatActivity {
         simpanPerubahan = findViewById(R.id.editSimpanPerubahanButton);
         lapanganFavorit = findViewById(R.id.lapanganFavoritButton);
         backButton = findViewById(R.id.back_arrow);
+        tentangKami = findViewById(R.id.tentangKamiButton);
+
         loadProfileUser();
         logout = findViewById(R.id.logoutButton);
         simpanPerubahan.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +80,13 @@ public class AkunActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AkunActivity.this, LapanganFavoritActivity.class));
+            }
+        });
+
+        tentangKami.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AkunActivity.this, TentangKami.class));
             }
         });
     }

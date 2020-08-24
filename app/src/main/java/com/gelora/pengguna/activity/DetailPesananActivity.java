@@ -31,8 +31,10 @@ import static com.gelora.pengguna.activity.PesanLapanganActivity.ID_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.JAM_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.NAMA_PEMESAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.STATUS_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_LAPANGAN_MILLIS;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESAN_USER;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESAN_USER_MILLIS;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TOTAL_HARGA;
 import static com.gelora.pengguna.adapter.LapanganAdapter.ID_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
@@ -43,6 +45,7 @@ public class DetailPesananActivity extends AppCompatActivity {
     Button buktiTransferButton, batalkanButton;
     String idTransaksiIntent,namaPemesanIntent, buktiPembayaranIntent, jamPesanIntent, tanggalPesanIntent, statusPesanIntent, namaLapanganIntent, alasanPesananIntent, UIDMitraIntent, tanggalPesanUserIntent, idLapanganIntent;
     int totalHargaIntent;
+    long tanggalLapanganMillisIntent, tanggalPesanUserMillisIntent;
     String forUploadText = "belum ada";
     String alasanDefault = "Tidak Ada";
     Locale locale = new Locale("id", "ID");
@@ -85,7 +88,7 @@ public class DetailPesananActivity extends AppCompatActivity {
             statusField.setText(alasanPesananIntent);
         }
 
-        hapusRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalPesanUserIntent).child("id_pesanan").child(idTransaksiIntent);
+        hapusRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(String.valueOf(tanggalPesanUserMillisIntent)).child("id_pesanan").child(idTransaksiIntent);
         // membuat tampilan seperti pop up
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -119,6 +122,8 @@ public class DetailPesananActivity extends AppCompatActivity {
                     intent.putExtra(UID_MITRA, UIDMitraIntent);
                     intent.putExtra(TANGGAL_PESAN_USER, tanggalPesanUserIntent);
                     intent.putExtra(ID_LAPANGAN, idLapanganIntent);
+                    intent.putExtra(TANGGAL_LAPANGAN_MILLIS, tanggalLapanganMillisIntent);
+                    intent.putExtra(TANGGAL_PESAN_USER_MILLIS, tanggalPesanUserMillisIntent);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(DetailPesananActivity.this, ImagePreviewActivity.class);
@@ -168,6 +173,8 @@ public class DetailPesananActivity extends AppCompatActivity {
         UIDMitraIntent = intent.getStringExtra(UID_MITRA);
         tanggalPesanUserIntent = intent.getStringExtra(TANGGAL_PESAN_USER);
         idLapanganIntent = intent.getStringExtra(ID_LAPANGAN);
+        tanggalLapanganMillisIntent = intent.getLongExtra(TANGGAL_LAPANGAN_MILLIS, 0);
+        tanggalPesanUserMillisIntent = intent.getLongExtra(TANGGAL_PESAN_USER_MILLIS, 0);
         s = n.format(totalHargaIntent);
         a = s.replaceAll(",00", "").replaceAll("Rp", "Rp. ");
     }

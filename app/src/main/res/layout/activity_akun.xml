@@ -148,13 +148,26 @@
             android:id="@+id/lapanganFavoritButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/logoutButton"
+            android:layout_above="@id/tentangKamiButton"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_blue_rounded"
             android:fontFamily="sans-serif"
             android:text="Lapangan Favorit"
             android:textAllCaps="false"
             android:textColor="@color/putih"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/tentangKamiButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/logoutButton"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_green_rounded_stroke_5dp"
+            android:fontFamily="sans-serif"
+            android:text="Tentang Kami"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
 

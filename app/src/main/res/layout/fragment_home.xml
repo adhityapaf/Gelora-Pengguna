@@ -11,42 +11,49 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <RelativeLayout
-            android:id="@+id/beritaOlahragaLabelRelative"
-            android:layout_width="wrap_content"
+            android:id="@+id/beritaRelative"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/olahargaKategoriRelative"
-            android:layout_alignParentStart="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="20dp"
+            android:visibility="gone"
             >
-
-            <ImageView
-                android:id="@+id/ic_berita"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_berita" />
-
-            <TextView
+            <RelativeLayout
+                android:id="@+id/beritaOlahragaLabelRelative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/ic_berita"
-                android:fontFamily="sans-serif-medium"
-                android:text="Berita Olahraga"
-                android:textColor="@color/hitam"
-                android:textSize="18sp" />
+                android:layout_alignParentStart="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="20dp"
+                >
+
+                <ImageView
+                    android:id="@+id/ic_berita"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_berita" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/ic_berita"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Berita Olahraga"
+                    android:textColor="@color/hitam"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/berita_recyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="157dp"
+                android:layout_below="@id/beritaOlahragaLabelRelative"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp" />
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/berita_recyclerView"
-            android:layout_width="wrap_content"
-            android:layout_height="157dp"
-            android:layout_below="@id/beritaOlahragaLabelRelative"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp" />
 
         <RelativeLayout
             android:id="@+id/mauMainApaRelative"

@@ -51,7 +51,10 @@ public class OrderFragment extends Fragment {
         mContext = getContext();
         orderRef = FirebaseDatabase.getInstance().getReference("pesanan").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
         readData();
         return view;
     }

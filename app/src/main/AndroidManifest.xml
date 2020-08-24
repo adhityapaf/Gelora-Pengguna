@@ -19,11 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".activity.ImagePreviewActivity"
-            android:theme="@style/AppTheme.DialogPop"/>
-        <activity android:name=".activity.DetailPesananActivity"
-            android:theme="@style/AppTheme.DialogPop"
-            />
+        <activity android:name=".activity.TentangKami"></activity>
+        <activity
+            android:name=".activity.ImagePreviewActivity"
+            android:theme="@style/AppTheme.DialogPop" />
+        <activity
+            android:name=".activity.DetailPesananActivity"
+            android:theme="@style/AppTheme.DialogPop" />
         <activity android:name=".activity.LapanganFavoritActivity" />
         <activity android:name=".activity.BerhasilUploadActivity" />
         <activity android:name=".activity.UploadBuktiPembayaranActivity" />

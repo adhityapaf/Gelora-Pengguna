@@ -52,7 +52,10 @@ import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -82,6 +85,8 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     public static final String UID_PELANGGAN = "com.gelora.pengguna.uid_pelanggan";
     public static final String TANGGAL_PESAN_USER = "com.gelora.pengguna.tanggal_pesan_user";
     public static final String FAVORIT_LAPANGAN = "com.gelora.pengguna.favorit_lapangan";
+    public static final String TANGGAL_LAPANGAN_MILLIS = "com.gelora.pengguna.tanggal_lapangan_millis";
+    public static final String TANGGAL_PESAN_USER_MILLIS = "com.gelora.pengguna.tanggal_pesan_user_millis";
 
 
     TextView namaLapangan, kategoriLapangan, jenisLapangan, hargaLapangan, pilihTanggalLapangan, tanggalLapanganReview, jamLapanganReview, hargaLapanganReview;
@@ -109,6 +114,8 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     String uid_pelanggan;
     String tanggalHariIni;
     Boolean isFavorited = false;
+    long tanggalLapanganMillis;
+    long tanggalPesanUserMillis;
 
     @Override
     protected void onStart() {
@@ -344,8 +351,21 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     }
     private void hariniTanggalBerapa() {
         Calendar c = Calendar.getInstance();
+        int month = c.get(Calendar.MONTH);
+        month = month + 1;
+        String dateSlash = ""+c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+c.get(Calendar.YEAR);
+        DateFormat format = new SimpleDateFormat("EEEEEEE, dd MMMM yyyy", locale);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date date = sdf.parse(dateSlash);
+            long millis = date.getTime();
+            tanggalPesanUserMillis = millis;
+            c.setTimeInMillis(millis);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         tanggalHariIni = DateFormat.getDateInstance(DateFormat.FULL, locale).format(c.getTime());
-        System.out.println("Tanggal hari ini : "+tanggalHariIni);
+        System.out.println("Tanggal hari ini : "+tanggalHariIni+"\nDalam Millis : "+tanggalPesanUserMillis);
     }
 
     private void iniMidtransSDK() {
@@ -389,13 +409,29 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         if (month == 0) {
             month = 1;
+        } else if (month > 1){
+            month = month + 1;
         }
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        c.set(Calendar.MONTH, month);
+        c.set(Calendar.MONTH, month-1);
         c.set(Calendar.YEAR, year);
         String tanggal = "" + dayOfMonth + "/" + month + "/" + year;
         String dateString = DateFormat.getDateInstance(DateFormat.FULL, locale).format(c.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            // convert to Millis
+            Date date = sdf.parse(tanggal);
+            long millis = date.getTime();
+            tanggalLapanganMillis = millis;
+            // convert to Date
+            DateFormat format = new SimpleDateFormat("EEEEEEE, dd MMMM yyyy", locale);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(millis);
+            System.out.println("Date : "+tanggal+"\nMillis : "+millis+"\nConverted : "+format.format(calendar.getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         pilihTanggalLapangan.setText(tanggal);
         pilihTanggalLapangan.setVisibility(View.VISIBLE);
         tanggalLapanganReview.setVisibility(View.VISIBLE);
@@ -438,6 +474,10 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
     @Override
     public void jamReview(ArrayList<String> jamList) {
         Collections.sort(jamList);
+        if (jamList.size() > 3){
+            Log.d(TAG, "jamReview: Maxed out Jam Review!");
+            return;
+        }
         if (jamList.isEmpty()) {
             textA = "";
 
@@ -493,8 +533,8 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         pesananRef.child("pesanan_counter").setValue(idPesanan);
         String jamlapanganText = jamLapanganReview.getText().toString();
         String tanggalLapanganText = tanggalLapanganReview.getText().toString();
-        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan,UIDMitraIntent, uid_pelanggan, tanggalHariIni, idLapanganIntent);
-        pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tanggalHariIni).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
+        PesananData pesananData = new PesananData(String.valueOf(idPesanan), namaPemesan, price, bukti_pembayaran, jamlapanganText, tanggalLapanganText, status_pesanan, namaLapanganIntent, alasan_pesanan,UIDMitraIntent, uid_pelanggan, tanggalHariIni, idLapanganIntent, tanggalLapanganMillis, tanggalPesanUserMillis);
+        pesananRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(String.valueOf(tanggalPesanUserMillis)).child("id_pesanan").child(String.valueOf(idPesanan)).setValue(pesananData);
         Log.d(TAG, "passData: Passing Data to Firebase");
         Intent intent = new Intent(PesanLapanganActivity.this, UploadBuktiPembayaranActivity.class);
         intent.putExtra(ID_PESANAN, String.valueOf(idPesanan));
@@ -510,6 +550,8 @@ public class PesanLapanganActivity extends AppCompatActivity implements DatePick
         intent.putExtra(UID_PELANGGAN, uid_pelanggan);
         intent.putExtra(TANGGAL_PESAN_USER, tanggalHariIni);
         intent.putExtra(ID_LAPANGAN, idLapanganIntent);
+        intent.putExtra(TANGGAL_LAPANGAN_MILLIS, tanggalLapanganMillis);
+        intent.putExtra(TANGGAL_PESAN_USER_MILLIS, tanggalPesanUserMillis);
         startActivity(intent);
         finish();
     }

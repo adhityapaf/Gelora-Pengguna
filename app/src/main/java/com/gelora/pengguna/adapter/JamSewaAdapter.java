@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +39,7 @@ public class JamSewaAdapter extends RecyclerView.Adapter<JamSewaAdapter.ViewHold
     public JamSewaAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.jam_lapangan_items, parent, false);
         pilihan = new ArrayList<>();
+
         return new ViewHolder(view);
     }
 
@@ -46,10 +48,12 @@ public class JamSewaAdapter extends RecyclerView.Adapter<JamSewaAdapter.ViewHold
         holder.jamText.setText(jamArrayList.get(position));
         holder.jamRelative.setOnClickListener(new View.OnClickListener() {
             Boolean buttonClicked = false;
-            PesanLapanganActivity pesanLapanganActivity = new PesanLapanganActivity();
-
             @Override
             public void onClick(View v) {
+                if (pilihan.size() >= 3){
+                    Toast.makeText(mContext, "Maksimal Sewa 3 Jam", Toast.LENGTH_SHORT).show();
+                    buttonClicked = true;
+                }
                 if (buttonClicked == false) {
                     holder.jamRelative.setBackground(mContext.getResources().getDrawable(R.drawable.button_green_rounded_5dp));
                     holder.jamText.setTextColor(Color.WHITE);
@@ -61,10 +65,12 @@ public class JamSewaAdapter extends RecyclerView.Adapter<JamSewaAdapter.ViewHold
                     buttonClicked = false;
                     pilihan.remove(holder.jamText.getText().toString());
                 }
+
                 System.out.println(pilihan);
                 onJamClickListener.jamReview(pilihan);
             }
         });
+
     }
 
     @Override

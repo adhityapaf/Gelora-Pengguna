@@ -2,6 +2,7 @@ package com.gelora.pengguna.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,10 @@ import static com.gelora.pengguna.activity.PesanLapanganActivity.ID_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.JAM_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.NAMA_PEMESAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.STATUS_PESANAN;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_LAPANGAN_MILLIS;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESANAN;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESAN_USER;
+import static com.gelora.pengguna.activity.PesanLapanganActivity.TANGGAL_PESAN_USER_MILLIS;
 import static com.gelora.pengguna.activity.PesanLapanganActivity.TOTAL_HARGA;
 import static com.gelora.pengguna.adapter.LapanganAdapter.ID_LAPANGAN;
 import static com.gelora.pengguna.adapter.LapanganAdapter.NAMA_LAPANGAN;
@@ -50,7 +53,22 @@ public class PesananListAdapter extends RecyclerView.Adapter<PesananListAdapter.
     @Override
     public void onBindViewHolder(@NonNull final PesananListAdapter.ViewHolder holder, final int position) {
         holder.orderId.setText(pesananData.get(position).getId_pesanan());
-        holder.orderStatus.setText(pesananData.get(position).getStatus_pesanan());
+        if (pesananData.get(position).getStatus_pesanan().equals("Belum Upload Bukti")){
+            holder.orderStatus.setText("Menunggu Pembayaran");
+            holder.orderStatus.setTextSize(14);
+        }
+        if (pesananData.get(position).getStatus_pesanan().equals("Sudah Upload Bukti")){
+            holder.orderStatus.setText("Dibayar");
+            holder.orderStatus.setTextColor(Color.BLUE);
+        }
+        if (pesananData.get(position).getStatus_pesanan().equals("Diterima")){
+            holder.orderStatus.setText("Diterima");
+            holder.orderStatus.setTextColor(Color.parseColor("#34A853"));
+        }
+        if (pesananData.get(position).getStatus_pesanan().equals("Ditolak")){
+            holder.orderStatus.setText("Ditolak");
+            holder.orderStatus.setTextColor(Color.RED);
+        }
         holder.lihatDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +85,8 @@ public class PesananListAdapter extends RecyclerView.Adapter<PesananListAdapter.
                 intent.putExtra(UID_MITRA, pesananData.get(position).getUid_mitra());
                 intent.putExtra(TANGGAL_PESAN_USER, pesananData.get(position).getTanggal_pesan_user());
                 intent.putExtra(ID_LAPANGAN, pesananData.get(position).getId_lapangan());
+                intent.putExtra(TANGGAL_LAPANGAN_MILLIS, pesananData.get(position).getTanggalLapanganMillis());
+                intent.putExtra(TANGGAL_PESAN_USER_MILLIS, pesananData.get(position).getTanggalPesanUserMillis());
                 mContext.startActivity(intent);
             }
         });
