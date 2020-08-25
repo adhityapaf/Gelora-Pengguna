@@ -40,9 +40,21 @@
         android:layout_height="match_parent"
         android:layout_below="@id/header_relative"
         android:layout_margin="20dp" />
+
     <ProgressBar
+        android:id="@+id/progressbarlingkaran"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/lapanganFavoritText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/progressbarlingkaran"/>
+        android:fontFamily="sans-serif"
+        android:text="Belum Ada Lapangan Favorit"
+        android:textColor="@color/hitam"
+        android:visibility="gone"
+        />
 </RelativeLayout>

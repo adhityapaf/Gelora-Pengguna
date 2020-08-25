@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class LapanganFavoritActivity extends AppCompatActivity {
     ImageView backButton;
-    TextView namaKategori;
+    TextView favoritText;
     RecyclerView lapanganFavoritRecycler;
     Context mContext;
     DatabaseReference ref, favRef;
@@ -39,9 +39,11 @@ public class LapanganFavoritActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lapangan_favorit);
         lapanganFavoritRecycler = findViewById(R.id.lapanganFavoritRecycler);
         progressBar = findViewById(R.id.progressbarlingkaran);
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
         backButton = findViewById(R.id.back_arrow);
         list = new ArrayList<>();
+        favoritText = findViewById(R.id.lapanganFavoritText);
+        favoritText.setVisibility(View.VISIBLE);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +62,11 @@ public class LapanganFavoritActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.VISIBLE);
         list.clear();
         readData();
+        if (list.isEmpty()){
+            favoritText.setVisibility(View.VISIBLE);
+        }
     }
 
     void readData(){
@@ -80,8 +84,10 @@ public class LapanganFavoritActivity extends AppCompatActivity {
                                         LapanganData lp = ds.getValue(LapanganData.class);
                                         list.add(lp);
                                     }
+
                                     favRef.keepSynced(true);
                                     progressBar.setVisibility(View.GONE);
+                                    favoritText.setVisibility(View.GONE);
                                 }
                             }
 
@@ -91,9 +97,9 @@ public class LapanganFavoritActivity extends AppCompatActivity {
                             }
                         });
                     }
-
                     final LapanganAdapter lapanganAdapter = new LapanganAdapter(list, LapanganFavoritActivity.this);
                     lapanganFavoritRecycler.setAdapter(lapanganAdapter);
+
                 }
             }
 

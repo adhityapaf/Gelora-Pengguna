@@ -55,7 +55,7 @@
                 android:layout_below="@id/namaPelangganLabel"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/green_stroke_rectangle"
-                android:hint="Isikan Nama Anda.."
+                android:hint="Isi Nama Anda Disini.."
                 android:inputType="textPersonName"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp" />
@@ -78,7 +78,7 @@
                 android:layout_below="@id/emailPelangganLabel"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/green_stroke_rectangle"
-                android:hint="Isikan Email Anda.."
+                android:hint="Isi Email Anda Disini.."
                 android:inputType="textEmailAddress"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp" />
@@ -107,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/green_stroke_rectangle"
-                    android:hint="Isikan Passwod Anda"
+                    android:hint="Isi Password Anda Disini.."
                     android:inputType="textPassword"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp" />
