@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/welcome_screen_background"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    android:scrollbars="none"
     tools:context=".activity.Register">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
     <ImageView
         android:id="@+id/logoGeloraWelcome"
@@ -138,8 +145,8 @@
         android:id="@+id/progressbar_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/registrasiformScroll"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:elevation="10dp"
         android:visibility="gone" />
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
